@@ -1,22 +1,11 @@
 
 
 function getRef ( reference) {
-    const a = [{
-        firstName:"david",
-        lastName:"serfaty",
-        age:23,
-        numero:reference
-    },{
-        firstName:"avner",
-        lastName:"serfaty",
-        age:16,
-        numero:reference
-    },{
-        firstName:"net",
-        lastName:"serfaty",
-        age:19,
-        numero:reference
-    }]
+    const a = [ 
+    { reference: "Produit 1", prix: 10, disponibilite: true, stock: 5 },
+    { reference: "Produit 2", prix: 20, disponibilite: true, stock: 10 },
+    { reference: "Produit 3", prix: 15, disponibilite: false, stock: 0 },
+    { reference: "Produit 4", prix: 25, disponibilite: true, stock: 3 },]
    return a
    
 } 
