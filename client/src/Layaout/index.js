@@ -1,8 +1,8 @@
 
 import { Container } from "@mui/material";
 
-import Navbar from "../NavBar";
-import Produits from "../Produits";
+import Navbar from "./NavBar";
+import Produits from "../components/Produits";
 import Footer from '../components/Footer'
 
 const Layaout = () =>{

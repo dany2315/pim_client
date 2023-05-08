@@ -11,9 +11,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { getRef } from "./controllers/getRef";
-import Search from "./components/Search";
-import ProduitMobile from "./components/mobile/ProduitMobile";
+import { getRef } from "../../controllers/getRef";
+import Search from "../Search";
+import ProduitMobile from "../mobile/ProduitMobile";
 import Produit from "./Produit";
 
 function Produits() {
