@@ -1,9 +1,9 @@
-
+//mui
 import { Container } from "@mui/material";
-
+//project import
 import Navbar from "./NavBar";
-import Produits from "../components/Produits";
 import Footer from '../components/Footer'
+import { Outlet } from "react-router-dom";
 
 const Layaout = () =>{
 
@@ -33,8 +33,8 @@ return (
             flexDirection: "column",
           }}
         >
-         
-          <Produits />
+         <Outlet/>
+          
         </Container>
       </Container>
       <Footer/>

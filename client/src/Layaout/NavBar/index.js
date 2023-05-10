@@ -1,8 +1,53 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Button, IconButton, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+//react router
+import {NavLink} from 'react-router-dom'
+
+const loginButtonStyle = {
+  backgroundColor: '#FF3366',
+  color: '#FFFFFF',
+  fontSize: '0.8rem',
+  '&:hover': {
+    backgroundColor: '#CC0052',
+  },
+};
+
+const registerButtonStyle = {
+  backgroundColor: '#66CCFF',
+  color: '#FFFFFF',
+  fontSize: '0.8rem',
+  '&:hover': {
+    backgroundColor: '#0088CC',
+  },
+};
+
+const menuLinkStyles = {
+  color: '#333',
+  textDecoration: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  fontWeight: 'bold',
+  transition: 'background-color 0.3s ease',
+  '&:hover': {
+    backgroundColor: '#EBF2FA',
+  },
+};
+
+const activeMenuLinkStyles = {
+  fontWeight: 'bold',
+  backgroundColor: '#82CEF9',
+  color:'white',
+};
+
+
+
+
+
+
 
 function Navbar() {
+  const menuArrays = [{nom:"produits",path:"/"},{nom:"fournisseurs",path:"/fournisseurs"},{nom:"ajouter un fournisseur",path:"/newFournisseur"}]
   const [anchorEl, setAnchorEl] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -22,8 +67,8 @@ function Navbar() {
           <IconButton edge="start" sx={{ marginRight: 2 }} color="inherit" aria-label="menu" onClick={handleClick}>
             <MenuIcon />
           </IconButton>
-          <Button color="inherit" sx={{ flexGrow: 1 }}>
-            MonLogo
+          <Button color="inherit" component={NavLink} to='/' sx={{ flexGrow: 1 }}>
+            NET COMPUTER SERVICES
           </Button>
           <Menu
             id="menu-appbar"
@@ -38,11 +83,34 @@ function Navbar() {
               vertical: 'top',
               horizontal: 'left',
             }}
-            sx={{ marginTop: '40px', transformOrigin: 'left top' }}
+            sx={{ marginTop: '40px', transformOrigin: 'left top' , borderRadius:'20px'}}
           >
-            <MenuItem onClick={handleClose}>Accueil</MenuItem>
-            <MenuItem onClick={handleClose}>Produits</MenuItem>
-            <MenuItem onClick={handleClose}>Contact</MenuItem>
+            {menuArrays.map((menuArray,index)=>
+            <MenuItem
+            key={index}
+            component={NavLink}
+            onClick={handleClose}
+            to={menuArray.path}
+            activeClassName="active"
+            sx={{
+              ...menuLinkStyles,
+              '&.active': {
+                ...activeMenuLinkStyles,
+              },
+            }}
+          >{menuArray.nom}
+          </MenuItem>
+            )
+
+
+
+
+
+
+
+
+            }
+
           </Menu>
         </div>
         <div>
@@ -71,23 +139,7 @@ function Navbar() {
   );
 }
 
-const loginButtonStyle = {
-  backgroundColor: '#FF3366',
-  color: '#FFFFFF',
-  fontSize: '0.8rem',
-  '&:hover': {
-    backgroundColor: '#CC0052',
-  },
-};
 
-const registerButtonStyle = {
-  backgroundColor: '#66CCFF',
-  color: '#FFFFFF',
-  fontSize: '0.8rem',
-  '&:hover': {
-    backgroundColor: '#0088CC',
-  },
-};
 
 export default Navbar;
 
