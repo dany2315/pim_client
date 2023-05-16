@@ -10,6 +10,9 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
+    fallback: {
+      buffer: require.resolve('buffer/'),
+    },
     extensions: ['.js', '.jsx'],
   },
   module: {
