@@ -38,7 +38,7 @@ function Produits() {
   });
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" >
       <Typography variant="h5">Liste des resultats</Typography>
       <Search onSearch={onSearch} />
       {produitsFiltres.length === 0? null:
