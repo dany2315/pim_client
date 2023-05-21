@@ -47,7 +47,7 @@ const activeMenuLinkStyles = {
 
 
 function Navbar() {
-  const menuArrays = [{nom:"produits",path:"/"},{nom:"fournisseurs",path:"/fournisseurs"},{nom:"ajouter un fournisseur",path:"/newFournisseur"}]
+  const menuArrays = [{nom:"rechercher produits",path:"/"},{nom:"fournisseurs",path:"/fournisseurs"},{nom:"ajouter un fournisseur",path:"/newFournisseur"}]
   const [anchorEl, setAnchorEl] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
