@@ -3,7 +3,7 @@ import Layaout from "./Layaout";
 import Produits from "./components/Produits";
 import Fournisseurs from "./components/Fournisseurs";
 import Fournisseur from "./components/Fournisseurs/Fournisseur";
-import NewFournisseur from "./components/Fournisseurs/NewFournisseur"
+import NewFournisseur from "./components/NewFournisseur"
 
 
 const App = () => {

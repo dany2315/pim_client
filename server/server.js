@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import router from "./routes/index.js";
 import User from "./models/modelUser.js";
+import bodyParser from 'body-parser'
 
 //connection mongoDB localhost
 const CONNECTION_URL = "mongodb://localhost:27017/admin";
@@ -23,7 +24,8 @@ mongoose
 //server express URL: http://localhost:5000/api
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -55,5 +57,5 @@ app.post("/auth", async (req, res) => {
 });
 
 //use cors
-app.use(cors());
+
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));

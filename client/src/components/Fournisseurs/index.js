@@ -3,17 +3,14 @@ import {
   Box,
   FormControl,
   Typography,
-  Select,
-  MenuItem,
   Container,
   Grid,
-  
-  InputLabel,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import FournisseurMobile from "../mobile/FournisseurMobile";
-import Fournisseur from './Fournisseur'
+import Fournisseur from './Fournisseur';
+import axios from "axios";
 
 function Fournisseurs() {
   const theme = useTheme();
@@ -22,8 +19,13 @@ function Fournisseurs() {
 
 
 useEffect(() => {
-    const onSearch = () => {
+
+
+  
+    const fetchFournisseur = async () => {
         
+
+      await axios.get()
         const allfournisseurs = [
             {
                 nom:"PICATA",

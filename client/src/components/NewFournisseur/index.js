@@ -3,6 +3,7 @@ import axios from "axios";
 import Papa from "papaparse";
 import {
   TextField,
+  FormHelperText,
   IconButton,
   Grid,
   Button,
@@ -20,17 +21,16 @@ const NewFournisseur = () => {
   const [modifiedNames, setModifiedNames] = useState({});
 
   //data avec modif des champs
-  const [updatedData, setUpdatedData] = useState();
+  const [updatedData, setUpdatedData] = useState([]);
   const [data, setData] = useState([]);
   const [file, setFile] = useState([]);
-  const [nameCollect,setNameCollect] = useState("");
-
-
+  const [nameCollect, setNameCollect] = useState();
 
   const handleChange = (e) => {
     const nameFourn = e.target.value
-    setNameCollect(nameFourn)
-  }
+    console.log(nameFourn);
+    setNameCollect(nameFourn);
+  };
 
   //fonction qui set la const ModifiedNames avec l'index du keyNames map
   //et la value du select
@@ -45,6 +45,12 @@ const NewFournisseur = () => {
       }
       return updatedNames;
     });
+    const updatedKeyNames = keyNames.map((keyName, index) => {
+      if (modifiedNames.hasOwnProperty(index)) {
+        return modifiedNames[index];
+      }
+      return keyName;
+    });
   };
 
   //fonction qui fais les changement des keyName avec le modifiedNames
@@ -57,25 +63,31 @@ const NewFournisseur = () => {
         return keyName;
       });
 
-      setUpdatedData(
-        data.map((item) => {
-          const updatedItem = {};
-          Object.keys(item).forEach((key, index) => {
-            const updatedKey = updatedKeyNames[index];
-            if (updatedKey) {
-              updatedItem[updatedKey] = item[key];
-            }
-          });
-          return updatedItem;
-        })
-      );
+      const updateDatascop = data.map((item) => {
+        const updatedItem = {};
+        Object.keys(item).forEach((key, index) => {
+          const updatedKey = updatedKeyNames[index];
+          if (updatedKey) {
+            updatedItem[updatedKey] = item[key];
+          }
+        });
+        updatedKeyNames.forEach((updatedKey, index) => {
+          if (updatedKey === "indispenssable") {
+            delete updatedItem[index]; // Supprimer la clé
+            delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
+          }
+        });
+        return updatedItem;
+      })
+
+      setUpdatedData(updateDatascop);
 
       console.log("array final :", updatedKeyNames);
-
+      
       // Appel à l'API pour sauvegarder les données
-      await axios.post("/api/saveData", {
-        collectionName: "nomDeLaCollection",
-        data: updatedData,
+      await axios.post("http://localhost:5000/api/fournisseur", {
+        collectionName: nameCollect,
+        data: updateDatascop,
       });
 
       console.log("Données sauvegardées avec succès !");
@@ -86,8 +98,9 @@ const NewFournisseur = () => {
     console.log(updatedData);
     console.log("Data  :", data);
     console.log("keyNames :", keyNames);
-
+    console.log("le collectName :", nameCollect);
     console.log("Data mis à jour :", updatedData);
+    console.log("nom ce la collection :",nameCollect);
   };
 
   const handleRemoveField = (index) => {
@@ -200,36 +213,44 @@ const NewFournisseur = () => {
                 </Button>
               </Box>
 
-
               <Grid container>
                 <Grid
                   item
                   xs={12}
-                  sm={6}
-                  sx={{ textAlign: "center", marginBottom: 3 }}
+                  sm={12}
+                  sx={{ textAlign: "center", marginTop: 3 }}
                 >
                   <Typography>
                     Liste des champs du fichier CSV importer
                   </Typography>
-                  
                 </Grid>
-                <Grid  item
+                <Grid
+                  item
                   xs={12}
                   sm={6}
-                  x={{ textAlign: "center", marginBottom: 3 }}>
-                  <TextField
-  variant="outlined"
-  style={{
-    borderRadius: "4px",
-    backgroundColor: "#f5f5f5",
-  }}
-  InputProps={{
-    style: {
-      borderRadius: "4px",
-      backgroundColor: "#f5f5f5",
-    },
-  }}
-/>
+                  x={{ textAlign: "center", marginBottom: 3 }}
+                >
+                  <Box
+                    component="form"
+                    sx={{
+                      "& > :not(style)": { m: 1, width: "25ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                    onChange={(e)=>handleChange(e)}
+                  >
+                    <TextField
+                      id="filled-search"
+                      label="nom du fournisseur"
+                      type="search"
+                      variant="standard"
+                      size="small"
+                      
+                    />
+                    <FormHelperText id="component-helper-text" sx={{marginTop:"0 !important"}}>
+                        Mettre que des minuscules
+                    </FormHelperText>
+                  </Box>
                 </Grid>
 
                 {keyNames.map((keyName, index) => (
