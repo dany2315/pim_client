@@ -85,7 +85,7 @@ const NewFournisseur = () => {
       console.log("array final :", updatedKeyNames);
       
       // Appel à l'API pour sauvegarder les données
-      await axios.post("http://localhost:5000/api/fournisseur", {
+      await axios.post("http://localhost:5000/api/fournisseur/new", {
         collectionName: nameCollect,
         data: updateDatascop,
       });

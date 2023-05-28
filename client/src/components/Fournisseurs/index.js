@@ -23,33 +23,16 @@ useEffect(() => {
 
   
     const fetchFournisseur = async () => {
+     try {
+      const response = await axios.get()
+      setfournisseurs(response.data);
+     } catch (error) {
+      
+     }    
         
-
-      await axios.get()
-        const allfournisseurs = [
-            {
-                nom:"PICATA",
-                distance:265,
-                articles:876890
-
-            },
-            {
-                nom:"zer",
-                distance:3456,
-                articles:5676543
-
-            },
-            {
-                nom:"fratr",
-                distance:9876,
-                articles:12345678
-
-            }
-        ]
-        setfournisseurs(allfournisseurs);
       };
 
- onSearch()
+      fetchFournisseur()
 }, [])
 
 

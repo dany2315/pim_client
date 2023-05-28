@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import morgan from "morgan";
@@ -24,7 +24,9 @@ mongoose
 //server express URL: http://localhost:5000/api
 const app = express();
 const PORT = process.env.PORT || 5000;
+//use body parser pour pouvoir augmenter la limite de transfere
 app.use(bodyParser.json({ limit: '10mb' }));
+//use cors
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
@@ -56,6 +58,6 @@ app.post("/auth", async (req, res) => {
   } catch (error) {}
 });
 
-//use cors
+
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));

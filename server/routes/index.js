@@ -1,4 +1,4 @@
-import express, { Router }  from "express";
+import express  from "express";
 import produitRoutes from "./produitRoutes.js";
 import fournisseurRoutes from "./fournisseurRoutes.js"
 
