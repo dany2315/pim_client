@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 
     const listShema = new mongoose.Schema({
-        collections: [{
+        
           collectionName: String,
           documentCount: Number,
           fieldNames: [String],
-        }],
-      });
+        },
+      );
 
     
 
