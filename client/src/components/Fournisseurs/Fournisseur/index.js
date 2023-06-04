@@ -1,5 +1,7 @@
 import { Grid, Typography, Paper, Box, Button } from "@mui/material";
+import Papa from "papaparse";
 import { styled } from "@mui/material/styles";
+import { useState } from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -9,9 +11,78 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Fournisseur = ({ nom, distance, articles }) => {
-  const nameChamps = ["ean", "sku", "prix", "ref", "refZERTDFGDFG"];
-  
+const Fournisseur = ({ nom, distance, articles ,updatedKeyNames}) => {
+
+
+  const [file,setFile] = useState()
+ 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    setFile(file);
+    console.log(file);
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const decoder = new TextDecoder("iso-8859-1");
+      const fileContent = decoder.decode(content);
+
+      const stringWithoutAccents = fileContent
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      Papa.parse(stringWithoutAccents, {
+        header: true,
+        encoding: "UTF-8",
+        skipEmptyLines: true,
+        worker: true,
+
+        complete: (results) => {
+          const dataNoFilter = results.data;
+          // Filtrer les objets où 'sku' est vide
+          let filteredData = [];
+          if (dataNoFilter) {
+            filteredData = dataNoFilter.filter((item) => {
+              for (let key in item) {
+                if (item.hasOwnProperty(key) && item[key] === "") {
+                  return false;
+                }
+              }
+              return true;
+            });
+          }
+          //nom des proprieter
+          const propertyNames =
+            filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
+          setKeyNames(propertyNames);
+
+          console.log("donne filtrer :", filteredData);
+          console.log("nom de key :", propertyNames);
+        },
+        error: (error) => {
+          console.error("Erreur lors de l'analyse du fichier CSV :", error);
+        },
+      });
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleSave = async (event) =>{
+
+await handleFileUpload(event)
+
+
+  }
+
+
+
+
+
+
+
+
+
   return (
     <>
       <Grid
@@ -40,7 +111,22 @@ const Fournisseur = ({ nom, distance, articles }) => {
           >
 
             <Grid item xs={12}>
-              <Box sx={{ marginBottom: 2, textAlign: "center" }}>
+              {file?<Box sx={{ marginBottom: 2, textAlign: "center" }}>
+                <Button
+                  variant="outlined"
+                  component="span"
+                  sx={{
+                    borderRadius: "20px",
+                    backgroundColor: "#82CEF9",
+                    color: "white",
+                    "&:hover": {
+                      color: "#82CEF9",
+                    },
+                  }}
+                >
+                  {file.name}
+                </Button>
+              </Box>:<Box sx={{ marginBottom: 2, textAlign: "center" }}>
                 <div>
                   <label htmlFor="file-upload">
                     <input
@@ -48,6 +134,7 @@ const Fournisseur = ({ nom, distance, articles }) => {
                       type="file"
                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                       style={{ display: "none" }}
+                      onChange={handleSave}
                     />
                     <Button
                       variant="contained"
@@ -62,7 +149,8 @@ const Fournisseur = ({ nom, distance, articles }) => {
                     </Button>
                   </label>
                 </div>
-              </Box>
+              </Box>}
+              
             </Grid>
             <Grid item xs={12} sx={{ padding: "0 !important" }}>
               <Typography variant="subtitle1" align="center" xs={12}>

@@ -24,7 +24,8 @@ useEffect(() => {
   
     const fetchFournisseur = async () => {
      try {
-      const response = await axios.get()
+      const response = await axios.get("http://localhost:5000/api/fournisseur")
+      console.log(response.data);
       setfournisseurs(response.data);
      } catch (error) {
       
@@ -75,17 +76,17 @@ useEffect(() => {
                 {isMobile ? (
                   console.log(isMobile),
                   <FournisseurMobile
-                    nom={fournisseur.nom}
-                    distance={fournisseur.distance}
+                    nom={fournisseur.collectionName}
+                    distance={fournisseur.documentCount}
                     articles={fournisseur.articles}
-                    
+                    updatedKeyNames={fournisseur.updatedKeyNames}
                   />
                 ) : (
                   <Fournisseur
                   nom={fournisseur.nom}
                   distance={fournisseur.distance}
                   articles={fournisseur.articles}
-                 
+                  
                   />
                 )}
               </Box>

@@ -4,11 +4,21 @@ import ListFourn from "../models/modelListFourn.js";
 
 export const getFournisseurs = async (req, res) => {
   try {
+    
   } catch (error) {}
 };
 
+export const reSaveFournisseur = async (req,res)=>{
+
+try {
+  
+} catch (error) {
+  
+}
+};
+
 export const saveFournisseur = async (req, res) => {
-  const { collectionName, data } = req.body;
+  const { collectionName, data , updatedKeyNames} = req.body;
 
   const keys = data.reduce((keys, obj) => {
     Object.keys(obj).forEach((key) => {
@@ -59,6 +69,7 @@ export const saveFournisseur = async (req, res) => {
               collectionName: name,
               documentCount: count,
               fieldNames: fieldNames,
+              updatedKeyNames:updatedKeyNames
             };
 
             return fourn;

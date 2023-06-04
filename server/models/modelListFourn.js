@@ -6,6 +6,7 @@ import mongoose from "mongoose";
           collectionName: String,
           documentCount: Number,
           fieldNames: [String],
+          updatedKeyNames:[String],
         },
       );
 

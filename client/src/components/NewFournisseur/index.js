@@ -20,6 +20,7 @@ const NewFournisseur = () => {
   //en fonction de l'index qui recoit du mapim de keyNames sans le reste de keyNames
   const [modifiedNames, setModifiedNames] = useState({});
 
+  const  [updatedKeyNames , setUpdatedKeyNames] = useState([])
   //data avec modif des champs
   const [updatedData, setUpdatedData] = useState([]);
   const [data, setData] = useState([]);
@@ -45,33 +46,30 @@ const NewFournisseur = () => {
       }
       return updatedNames;
     });
-    const updatedKeyNames = keyNames.map((keyName, index) => {
-      if (modifiedNames.hasOwnProperty(index)) {
-        return modifiedNames[index];
-      }
-      return keyName;
-    });
+    console.log("modifiedNames :",modifiedNames);
+
   };
 
   //fonction qui fais les changement des keyName avec le modifiedNames
   const handleSave = async () => {
     try {
-      const updatedKeyNames = keyNames.map((keyName, index) => {
+      const upKeyNames = keyNames.map((keyName, index) => {
         if (modifiedNames.hasOwnProperty(index)) {
           return modifiedNames[index];
         }
         return keyName;
       });
+      
 
       const updateDatascop = data.map((item) => {
         const updatedItem = {};
         Object.keys(item).forEach((key, index) => {
-          const updatedKey = updatedKeyNames[index];
+          const updatedKey = upKeyNames[index];
           if (updatedKey) {
             updatedItem[updatedKey] = item[key];
           }
         });
-        updatedKeyNames.forEach((updatedKey, index) => {
+        upKeyNames.forEach((updatedKey, index) => {
           if (updatedKey === "indispenssable") {
             delete updatedItem[index]; // Supprimer la clé
             delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
@@ -79,15 +77,16 @@ const NewFournisseur = () => {
         });
         return updatedItem;
       })
-
+      setUpdatedKeyNames(upKeyNames)
       setUpdatedData(updateDatascop);
 
-      console.log("array final :", updatedKeyNames);
+      console.log("updatedKeyNames final :", updatedKeyNames);
       
       // Appel à l'API pour sauvegarder les données
       await axios.post("http://localhost:5000/api/fournisseur/new", {
         collectionName: nameCollect,
         data: updateDatascop,
+        updatedKeyNames:updatedKeyNames
       });
 
       console.log("Données sauvegardées avec succès !");
