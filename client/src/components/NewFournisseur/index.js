@@ -79,7 +79,7 @@ const NewFournisseur = () => {
       })
       setUpdatedKeyNames(upKeyNames)
       setUpdatedData(updateDatascop);
-
+      console.log("upKeyNames :",upKeyNames);
       console.log("updatedKeyNames final :", updatedKeyNames);
       
       // Appel à l'API pour sauvegarder les données

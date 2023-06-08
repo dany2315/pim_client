@@ -1,7 +1,6 @@
 import React, { useState , useEffect} from "react";
 import {
   Box,
-  FormControl,
   Typography,
   Container,
   Grid,
@@ -83,9 +82,9 @@ useEffect(() => {
                   />
                 ) : (
                   <Fournisseur
-                  nom={fournisseur.nom}
-                  distance={fournisseur.distance}
-                  articles={fournisseur.articles}
+                  nom={fournisseur.collectionName}
+                  nombreArticles={fournisseur.documentCount}
+                  champs={fournisseur.fieldNames}
                   
                   />
                 )}

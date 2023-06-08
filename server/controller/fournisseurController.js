@@ -4,21 +4,28 @@ import ListFourn from "../models/modelListFourn.js";
 
 export const getFournisseurs = async (req, res) => {
   try {
-    
+          
+    const fournisseurs = await ListFourn.find({ fieldNames: { $ne: [] } });
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.status(200).send(fournisseurs);
+    console.log(fournisseurs);
+  } catch (err) {
+    console.error('Erreur lors de la récupération des fournisseurs :', err);
+    res.status(500).send({ message: 'Une erreur s\'est produite lors de la récupération des fournisseurs' });
+  }
+};
+
+
+
+export const reSaveFournisseur = async (req, res) => {
+  try {
   } catch (error) {}
 };
 
-export const reSaveFournisseur = async (req,res)=>{
-
-try {
-  
-} catch (error) {
-  
-}
-};
-
 export const saveFournisseur = async (req, res) => {
-  const { collectionName, data , updatedKeyNames} = req.body;
+  const { collectionName, data, updatedKeyNames } = req.body;
 
   const keys = data.reduce((keys, obj) => {
     Object.keys(obj).forEach((key) => {
@@ -62,26 +69,22 @@ export const saveFournisseur = async (req, res) => {
             document !== null && typeof document === "object"
               ? Object.keys(document)
               : [];
-          
 
           if (fieldNames.length > 0) {
             const fourn = {
               collectionName: name,
               documentCount: count,
               fieldNames: fieldNames,
-              updatedKeyNames:updatedKeyNames
+              updatedKeyNames: updatedKeyNames,
             };
 
             return fourn;
           }
           null;
-          
         })
       );
 
-
       await ListFourn.insertMany(listes);
-
     } catch (error) {
       console.error(
         "Erreur lors de la sauvegarde de la listeCollection :",

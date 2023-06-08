@@ -11,11 +11,11 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Fournisseur = ({ nom, distance, articles ,updatedKeyNames}) => {
+const Fournisseur = ({ nom, nombreArticles, champs }) => {
+  const [keyNames, setKeyNames] = useState([]);
+  const [data, setData] = useState([]);
+  const [file, setFile] = useState();
 
-
-  const [file,setFile] = useState()
- 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setFile(file);
@@ -50,6 +50,7 @@ const Fournisseur = ({ nom, distance, articles ,updatedKeyNames}) => {
               }
               return true;
             });
+            setData(filteredData);
           }
           //nom des proprieter
           const propertyNames =
@@ -68,20 +69,27 @@ const Fournisseur = ({ nom, distance, articles ,updatedKeyNames}) => {
     reader.readAsArrayBuffer(file);
   };
 
-  const handleSave = async (event) =>{
+  const handleSave =  (event) => {
+    handleFileUpload(event);
+    console.log("liste key names ", keyNames);
 
-await handleFileUpload(event)
-
-
-  }
-
-
-
-
-
-
-
-
+    const updateDatascop = data.map((item) => {
+      const updatedItem = {};
+      Object.keys(item).forEach((key, index) => {
+        const updatedKey = champs[index];
+        if (updatedKey) {
+          updatedItem[updatedKey] = item[key];
+        }
+      });
+      champs.forEach((updatedKey, index) => {
+        if (updatedKey === "indispenssable") {
+          delete updatedItem[index]; // Supprimer la clé
+          delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
+        }
+      });
+      return updatedItem;
+    });
+  };
 
   return (
     <>
@@ -97,8 +105,7 @@ await handleFileUpload(event)
           <Typography variant="h5">{nom}</Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography>distance:{distance} km</Typography>
-          <Typography>nombres d'articles:{articles}</Typography>
+          <Typography>nombres d'articles:{nombreArticles}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Grid
@@ -109,55 +116,57 @@ await handleFileUpload(event)
             alignItems="center"
             sx={{ borderLeft: "1px solid" }}
           >
-
             <Grid item xs={12}>
-              {file?<Box sx={{ marginBottom: 2, textAlign: "center" }}>
-                <Button
-                  variant="outlined"
-                  component="span"
-                  sx={{
-                    borderRadius: "20px",
-                    backgroundColor: "#82CEF9",
-                    color: "white",
-                    "&:hover": {
-                      color: "#82CEF9",
-                    },
-                  }}
-                >
-                  {file.name}
-                </Button>
-              </Box>:<Box sx={{ marginBottom: 2, textAlign: "center" }}>
-                <div>
-                  <label htmlFor="file-upload">
-                    <input
-                      id="file-upload"
-                      type="file"
-                      accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                      style={{ display: "none" }}
-                      onChange={handleSave}
-                    />
-                    <Button
-                      variant="contained"
-                      component="span"
-                      sx={{
-                        borderRadius: "20px",
-                        backgroundColor: "#82CEF9",
-                        color: "white",
-                      }}
-                    >
-                      <div>Choose File</div>
-                    </Button>
-                  </label>
-                </div>
-              </Box>}
-              
+              {file ? (
+                <Box sx={{ marginBottom: 2, textAlign: "center" }}>
+                  <Button
+                    variant="outlined"
+                    component="span"
+                    sx={{
+                      borderRadius: "20px",
+                      backgroundColor: "#82CEF9",
+                      color: "white",
+                      "&:hover": {
+                        color: "#82CEF9",
+                      },
+                    }}
+                  >
+                    {file.name}
+                  </Button>
+                </Box>
+              ) : (
+                <Box sx={{ marginBottom: 2, textAlign: "center" }}>
+                  <div>
+                    <label htmlFor="file-upload">
+                      <input
+                        id="file-upload"
+                        type="file"
+                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                        style={{ display: "none" }}
+                        onChange={handleSave}
+                      />
+                      <Button
+                        variant="contained"
+                        component="span"
+                        sx={{
+                          borderRadius: "20px",
+                          backgroundColor: "#82CEF9",
+                          color: "white",
+                        }}
+                      >
+                        <div>Choose File</div>
+                      </Button>
+                    </label>
+                  </div>
+                </Box>
+              )}
             </Grid>
             <Grid item xs={12} sx={{ padding: "0 !important" }}>
               <Typography variant="subtitle1" align="center" xs={12}>
                 Les noms des champs:
               </Typography>
             </Grid>
-            {nameChamps.map((skill, index) => (
+            {champs.map((skill, index) => (
               <Grid
                 item
                 xs="auto"
