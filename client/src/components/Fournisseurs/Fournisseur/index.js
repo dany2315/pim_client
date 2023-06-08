@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Fournisseur = ({ nom, nombreArticles, champs }) => {
+const Fournisseur = ({ nom,  champs ,updatedKeyNames}) => {
   const [keyNames, setKeyNames] = useState([]);
   const [data, setData] = useState([]);
   const [file, setFile] = useState();
@@ -58,7 +58,7 @@ const Fournisseur = ({ nom, nombreArticles, champs }) => {
           setKeyNames(propertyNames);
 
           console.log("donne filtrer :", filteredData);
-          console.log("nom de key :", propertyNames);
+          console.log("nom de key du fichiers :", propertyNames);
         },
         error: (error) => {
           console.error("Erreur lors de l'analyse du fichier CSV :", error);
@@ -101,22 +101,11 @@ const Fournisseur = ({ nom, nombreArticles, champs }) => {
         bgcolor={"white"}
         p={1}
       >
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography variant="h5">{nom}</Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography>nombres d'articles:{nombreArticles}</Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Grid
-            container
-            spacing={2}
-            direction={"row"}
-            justifyContent="center"
-            alignItems="center"
-            sx={{ borderLeft: "1px solid" }}
-          >
-            <Grid item xs={12}>
+        
+        <Grid item xs={6} sx={{borderLeft:"solid 1px"}}>
               {file ? (
                 <Box sx={{ marginBottom: 2, textAlign: "center" }}>
                   <Button
@@ -161,34 +150,6 @@ const Fournisseur = ({ nom, nombreArticles, champs }) => {
                 </Box>
               )}
             </Grid>
-            <Grid item xs={12} sx={{ padding: "0 !important" }}>
-              <Typography variant="subtitle1" align="center" xs={12}>
-                Les noms des champs:
-              </Typography>
-            </Grid>
-            {champs.map((skill, index) => (
-              <Grid
-                item
-                xs="auto"
-                key={index}
-                sx={{
-                  padding: "0 !important",
-                  borderRadius: 2,
-                  marginRight: 2,
-                  mb: 1,
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  transition: "box-shadow 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                    backgroundColor: "grey",
-                  },
-                }}
-              >
-                <Item>{skill}</Item>
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
       </Grid>
     </>
   );

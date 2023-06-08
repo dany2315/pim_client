@@ -4,20 +4,22 @@ import ListFourn from "../models/modelListFourn.js";
 
 export const getFournisseurs = async (req, res) => {
   try {
-          
     const fournisseurs = await ListFourn.find({ fieldNames: { $ne: [] } });
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.status(200).send(fournisseurs);
     console.log(fournisseurs);
   } catch (err) {
-    console.error('Erreur lors de la récupération des fournisseurs :', err);
-    res.status(500).send({ message: 'Une erreur s\'est produite lors de la récupération des fournisseurs' });
+    console.error("Erreur lors de la récupération des fournisseurs :", err);
+    res
+      .status(500)
+      .send({
+        message:
+          "Une erreur s'est produite lors de la récupération des fournisseurs",
+      });
   }
 };
-
-
 
 export const reSaveFournisseur = async (req, res) => {
   try {
@@ -41,50 +43,15 @@ export const saveFournisseur = async (req, res) => {
 
   const createListFourn = async () => {
     try {
-      //supprimer la collection listFourn
-      await ListFourn.deleteMany();
+      const fourn = {
+        collectionName: collectionName,
+        fieldNames: keys,
+        updatedKeyNames: updatedKeyNames,
+      };
+      const listFourn = new ListFourn(fourn);
 
-      // Récupérer les noms de toutes les collections et filtrer pour recuperer que du schema Fournisseur
-      const collections = await mongoose.connection.db
-        .listCollections()
-        .toArray();
-      const filteredCollections = collections.filter((collection) => {
-        return (
-          collection.name !== "user" && collection.name !== "listecollections"
-        );
-      });
-
-      const listes = await Promise.all(
-        filteredCollections.map(async (collection) => {
-          const name = collection.name;
-
-          const count = await mongoose.connection.db
-            .collection(name)
-            .countDocuments();
-          const document = await mongoose.connection.db
-            .collection(name)
-            .findOne({});
-
-          const fieldNames =
-            document !== null && typeof document === "object"
-              ? Object.keys(document)
-              : [];
-
-          if (fieldNames.length > 0) {
-            const fourn = {
-              collectionName: name,
-              documentCount: count,
-              fieldNames: fieldNames,
-              updatedKeyNames: updatedKeyNames,
-            };
-
-            return fourn;
-          }
-          null;
-        })
-      );
-
-      await ListFourn.insertMany(listes);
+      await listFourn.save();
+      console.log(fourn);
     } catch (error) {
       console.error(
         "Erreur lors de la sauvegarde de la listeCollection :",

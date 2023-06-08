@@ -80,14 +80,14 @@ const NewFournisseur = () => {
       setUpdatedKeyNames(upKeyNames)
       setUpdatedData(updateDatascop);
       console.log("upKeyNames :",upKeyNames);
-      console.log("updatedKeyNames final :", updatedKeyNames);
       
       // Appel à l'API pour sauvegarder les données
       await axios.post("http://localhost:5000/api/fournisseur/new", {
         collectionName: nameCollect,
         data: updateDatascop,
-        updatedKeyNames:updatedKeyNames
+        updatedKeyNames:upKeyNames
       });
+      console.log("updatedKeyNames final :", updatedKeyNames);
 
       console.log("Données sauvegardées avec succès !");
     } catch (error) {

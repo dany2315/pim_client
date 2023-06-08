@@ -75,17 +75,15 @@ useEffect(() => {
                 {isMobile ? (
                   console.log(isMobile),
                   <FournisseurMobile
-                    nom={fournisseur.collectionName}
-                    distance={fournisseur.documentCount}
-                    articles={fournisseur.articles}
-                    updatedKeyNames={fournisseur.updatedKeyNames}
+                  nom={fournisseur.collectionName}
+                  champs={fournisseur.fieldNames}
+                  updatedKeyNames={fournisseur.updatedKeyNames}
                   />
                 ) : (
                   <Fournisseur
                   nom={fournisseur.collectionName}
-                  nombreArticles={fournisseur.documentCount}
                   champs={fournisseur.fieldNames}
-                  
+                  updatedKeyNames={fournisseur.updatedKeyNames}
                   />
                 )}
               </Box>
