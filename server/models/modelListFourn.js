@@ -5,7 +5,6 @@ import mongoose from "mongoose";
         
           collectionName: String,
           fieldNames: [String],
-          updatedKeyNames:[String],
         },
       );
 

@@ -19,8 +19,6 @@ const NewFournisseur = () => {
   //de keyName du menu deroulant avec l'index du changement qui est
   //en fonction de l'index qui recoit du mapim de keyNames sans le reste de keyNames
   const [modifiedNames, setModifiedNames] = useState({});
-
-  const  [updatedKeyNames , setUpdatedKeyNames] = useState([])
   //data avec modif des champs
   const [updatedData, setUpdatedData] = useState([]);
   const [data, setData] = useState([]);
@@ -77,7 +75,6 @@ const NewFournisseur = () => {
         });
         return updatedItem;
       })
-      setUpdatedKeyNames(upKeyNames)
       setUpdatedData(updateDatascop);
       console.log("upKeyNames :",upKeyNames);
       
@@ -85,14 +82,27 @@ const NewFournisseur = () => {
       await axios.post("http://localhost:5000/api/fournisseur/new", {
         collectionName: nameCollect,
         data: updateDatascop,
-        updatedKeyNames:upKeyNames
+        fieldNames:upKeyNames
       });
-      console.log("updatedKeyNames final :", updatedKeyNames);
 
+      try{
+        await axios.post("http://localhost:5000/api/fournisseur/newFourn", {
+            collectionName: nameCollect,
+            fieldNames:upKeyNames
+          });
+          console.log("upKeyNames final :", upKeyNames);
+    
+          console.log("Données sauvegardées avec succès dans listFourn!");
+        } catch (error) {
+          console.error("Erreur lors de la sauvegarde des données listeFourn :", error);
+        }
       console.log("Données sauvegardées avec succès !");
     } catch (error) {
       console.error("Erreur lors de la sauvegarde des données :", error);
     }
+
+
+   
 
     console.log(updatedData);
     console.log("Data  :", data);
@@ -102,13 +112,6 @@ const NewFournisseur = () => {
     console.log("nom ce la collection :",nameCollect);
   };
 
-  const handleRemoveField = (index) => {
-    setKeyNames((prevNames) => prevNames.filter((_, i) => i !== index));
-    setModifiedNames((prevNames) => {
-      const { [index]: _, ...newNames } = prevNames;
-      return newNames;
-    });
-  };
 
   //fonction pour upload le fichier csv grace a papaparse
   const handleFileUpload = (event) => {

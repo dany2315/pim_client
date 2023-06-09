@@ -12,23 +12,33 @@ export const getFournisseurs = async (req, res) => {
     console.log(fournisseurs);
   } catch (err) {
     console.error("Erreur lors de la récupération des fournisseurs :", err);
-    res
-      .status(500)
-      .send({
-        message:
-          "Une erreur s'est produite lors de la récupération des fournisseurs",
-      });
+    res.status(500).send({
+      message:
+        "Une erreur s'est produite lors de la récupération des fournisseurs",
+    });
   }
 };
 
 export const reSaveFournisseur = async (req, res) => {
   try {
-  } catch (error) {}
+    const {data} = req.body
+    console.log("data :",data);
+
+res.status(200).send(data)
+  } catch (error) {
+    console.error("Erreur lors de la resauvgarde du fournisseur avec nouveau fichier :", error);
+    res.status(500).send({
+      message: "Erreur lors de la resauvgarde du fournisseur avec nouveau fichier :",
+    });
+  }
 };
 
-export const saveFournisseur = async (req, res) => {
-  const { collectionName, data, updatedKeyNames } = req.body;
+export const createFournisseur = async (req, res) => {
+  const { collectionName, data } = req.body;
 
+  //fonction pour cree le resume du fournisseur dans la collection listecollections
+
+  //recuperer les champs pour cree le fournisseur dans la Base de donne
   const keys = data.reduce((keys, obj) => {
     Object.keys(obj).forEach((key) => {
       if (!keys.includes(key)) {
@@ -41,40 +51,46 @@ export const saveFournisseur = async (req, res) => {
   // Ceci est le shema dynamicModel avec la fonction createDynamiqueModel pour avoir
   const Fournisseur = createDynamicModel(collectionName, keys);
 
-  const createListFourn = async () => {
-    try {
-      const fourn = {
-        collectionName: collectionName,
-        fieldNames: keys,
-        updatedKeyNames: updatedKeyNames,
-      };
-      const listFourn = new ListFourn(fourn);
-
-      await listFourn.save();
-      console.log(fourn);
-    } catch (error) {
-      console.error(
-        "Erreur lors de la sauvegarde de la listeCollection :",
-        error
-      );
-    }
-  };
-
   try {
     // Supprimer les anciennes données de la collection
     await Fournisseur.deleteMany();
 
     // Insérer les nouvelles données dans la collection
-    await Fournisseur.create(data);
-    //recreer la collection listFourn
-    await createListFourn();
-
+    await Fournisseur.create(data);  
     console.log("Données sauvegardées dans la collection :", collectionName);
     res.sendStatus(200);
   } catch (error) {
     console.error("Erreur lors de la sauvegarde de fournisseurs new :", error);
-    res.sendStatus(500);
+    res.status(500).send({
+      message: "Erreur lors de la sauvegarde de fournisseurs new",
+    });
   }
 };
 
-export default { saveFournisseur, getFournisseurs };
+
+export   const createListFourn = async (req, res) => {
+  const { collectionName, fieldNames } = req.body;
+  try {
+    const fourn = {
+      collectionName: collectionName,
+      fieldNames: fieldNames,
+    };
+    const listFourn = new ListFourn(fourn);
+
+    await listFourn.save();
+    console.log("le resume du fournisseur a ete cree avec succes :", fourn);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(
+      "Erreur lors de la sauvegarde du fournisseur dans la listeCollection :",
+      error
+    );
+    res.status(500).send({
+      message: "Erreur lors de la sauvegarde du fournisseur dans la listeCollection :",
+    });
+  }
+};
+
+
+
+export default { createFournisseur, getFournisseurs, createListFourn };

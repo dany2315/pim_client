@@ -18,9 +18,6 @@ function Fournisseurs() {
 
 
 useEffect(() => {
-
-
-  
     const fetchFournisseur = async () => {
      try {
       const response = await axios.get("http://localhost:5000/api/fournisseur")
@@ -75,15 +72,13 @@ useEffect(() => {
                 {isMobile ? (
                   console.log(isMobile),
                   <FournisseurMobile
-                  nom={fournisseur.collectionName}
-                  champs={fournisseur.fieldNames}
-                  updatedKeyNames={fournisseur.updatedKeyNames}
+                  collectionName={fournisseur.collectionName}
+                  fieldNames={fournisseur.fieldNames}
                   />
                 ) : (
                   <Fournisseur
-                  nom={fournisseur.collectionName}
-                  champs={fournisseur.fieldNames}
-                  updatedKeyNames={fournisseur.updatedKeyNames}
+                  collectionName={fournisseur.collectionName}
+                  fieldNames={fournisseur.fieldNames}
                   />
                 )}
               </Box>
