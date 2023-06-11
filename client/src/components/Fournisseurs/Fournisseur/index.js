@@ -1,26 +1,38 @@
 import { Grid, Typography, Box, Button } from "@mui/material";
 import axios from "axios";
 import Papa from "papaparse";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Fournisseur = ({ collectionName, fieldNames }) => {
   const [keyNames, setKeyNames] = useState([]);
-  const [data, setData] = useState();
   const [file, setFile] = useState();
+  const [plein, setPlein] = useState(false)
 
-  const handleGetRempli = () =>{
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
+  useEffect(() => {
+    const GetRempli = async () => {
+     try {
+      const response = await axios.get(`http://localhost:5000/api/fournisseur?id=${collectionName}`)
+      console.log("get plein ",response.data);
+      console.log();
+      setPlein(response.data);
+     } catch (error) {
+      console.log("erreur lors de la recup plein " , error);
+     }    
+        
+      };
+
+      GetRempli()
+}, [])
+
 
   const handleReSave = async (event) => {
-    await handleFileUpload(event);
+    const updatedData = await handleFileUpload(event);
     console.log("liste key names ", keyNames);
-    console.log("data : ",data);
-    const updateDatascop = data.map((item) => {
+    console.log("liste fieldNames : ", fieldNames);
+    console.log("data : ",updatedData);
+    //Sortir le data final en enlevant les champs et les valeur des
+    //articles indispenssable et garder que les autre 
+    const updateDatascop = updatedData.map((item) => {
       const updatedItem = {};
       Object.keys(item).forEach((key, index) => {
         const updatedKey = fieldNames[index];
@@ -37,9 +49,10 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
       return updatedItem;
     });
 
-    try {
-      const response = await axios.post("http://localhost:5000/api/fournisseur/resave", {
+   try {
+      await axios.post("http://localhost:5000/api/fournisseur/resave", {
         data: updateDatascop,
+        collectionName:collectionName
       });
       
     } catch (error) {
@@ -47,7 +60,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     }
   };
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload =  (event) => {
     return new Promise((resolve, reject) => {
       const file = event.target.files[0];
       setFile(file);
@@ -85,7 +98,6 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
               
               
             }
-            setData(filteredData);
             //nom des proprieter
             const propertyNames =
               filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
@@ -94,7 +106,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
             console.log("donne filtrer :", filteredData);
             console.log("nom de key du fichiers :", propertyNames);
 
-            resolve(); // Résoudre la promesse lorsque le traitement est terminé
+            resolve(filteredData); // Résoudre la promesse lorsque le traitement est terminé
           },
           error: (error) => {
             console.error("Erreur lors de l'analyse du fichier CSV :", error);

@@ -24,7 +24,7 @@ useEffect(() => {
       console.log(response.data);
       setfournisseurs(response.data);
      } catch (error) {
-      
+      console.log("erreur lors de la recuperations des fournisseurs", error);
      }    
         
       };

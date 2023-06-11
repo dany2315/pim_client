@@ -2,6 +2,22 @@ import mongoose from "mongoose";
 import createDynamicModel from "../models/modelFournisseur.js";
 import ListFourn from "../models/modelListFourn.js";
 
+
+
+export const getPlein =  (req,res)  =>{
+  try {
+    const {id} = req.query.id
+ console.log(id);
+    res.status(200).send(id);
+    console.log("ma colloc : ",id);
+  } catch (error) {
+    console.error("Erreur lors de la récupération de plein :", err);
+    res.status(500).send({
+      message:
+        "Une erreur s'est produite lors de la récupération de plein",
+    });
+  }
+}
 export const getFournisseurs = async (req, res) => {
   try {
     const fournisseurs = await ListFourn.find({ fieldNames: { $ne: [] } });
@@ -21,10 +37,11 @@ export const getFournisseurs = async (req, res) => {
 
 export const reSaveFournisseur = async (req, res) => {
   try {
-    const {data} = req.body
-    console.log("data :",data);
+    const {data,collectionName} = req.body
+    const maCollection = mongoose.connection.collection(collectionName);
+    maCollection.insertMany(data);
 
-res.status(200).send(data)
+res.status(200)
   } catch (error) {
     console.error("Erreur lors de la resauvgarde du fournisseur avec nouveau fichier :", error);
     res.status(500).send({
@@ -42,7 +59,7 @@ export const createFournisseur = async (req, res) => {
   const keys = data.reduce((keys, obj) => {
     Object.keys(obj).forEach((key) => {
       if (!keys.includes(key)) {
-        keys.push(key);
+        keys.push(key)
       }
     });
     return keys;
@@ -93,4 +110,4 @@ export   const createListFourn = async (req, res) => {
 
 
 
-export default { createFournisseur, getFournisseurs, createListFourn };
+export default { getFournisseurs ,getPlein ,createFournisseur, createListFourn };
