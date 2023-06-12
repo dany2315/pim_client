@@ -21,7 +21,7 @@ useEffect(() => {
     const fetchFournisseur = async () => {
      try {
       const response = await axios.get("http://localhost:5000/api/fournisseur")
-      console.log(response.data);
+      console.log("azert",response.data);
       setfournisseurs(response.data);
      } catch (error) {
       console.log("erreur lors de la recuperations des fournisseurs", error);

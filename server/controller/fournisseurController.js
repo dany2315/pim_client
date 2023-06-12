@@ -4,20 +4,27 @@ import ListFourn from "../models/modelListFourn.js";
 
 
 
-export const getPlein =  (req,res)  =>{
+export const getPlein = async (req,res)  =>{
+
+  const collectionName = req.params.id;
   try {
-    const {id} = req.query.id
- console.log(id);
-    res.status(200).send(id);
-    console.log("ma colloc : ",id);
+    const maCollection = mongoose.connection.collection(collectionName);
+    const objet = await maCollection.findOne({})
+    if (objet) {
+      res.status(200).send(true)
+    }else{
+      res.status(200).send(false)
+    }
+    
   } catch (error) {
-    console.error("Erreur lors de la récupération de plein :", err);
+    console.error("Erreur lors de la récupération de plein :", error);
     res.status(500).send({
       message:
         "Une erreur s'est produite lors de la récupération de plein",
     });
   }
-}
+};
+ 
 export const getFournisseurs = async (req, res) => {
   try {
     const fournisseurs = await ListFourn.find({ fieldNames: { $ne: [] } });
@@ -25,7 +32,7 @@ export const getFournisseurs = async (req, res) => {
     res.setHeader("Pragma", "no-cache");
     res.setHeader("Expires", "0");
     res.status(200).send(fournisseurs);
-    console.log(fournisseurs);
+    console.log("fourn",fournisseurs);
   } catch (err) {
     console.error("Erreur lors de la récupération des fournisseurs :", err);
     res.status(500).send({
@@ -39,9 +46,9 @@ export const reSaveFournisseur = async (req, res) => {
   try {
     const {data,collectionName} = req.body
     const maCollection = mongoose.connection.collection(collectionName);
-    maCollection.insertMany(data);
+    const result = await maCollection.insertMany(data);
 
-res.status(200)
+res.status(200).send(result)
   } catch (error) {
     console.error("Erreur lors de la resauvgarde du fournisseur avec nouveau fichier :", error);
     res.status(500).send({
@@ -107,7 +114,21 @@ export   const createListFourn = async (req, res) => {
     });
   }
 };
+export const deleteContenu = async (req, res) => {
+  try {
+    const {collectionName} = req.body
+    const maCollection = mongoose.connection.collection(collectionName);
+    const result = await maCollection.deleteMany({});
+    console.log("result delete :",result);
+res.status(200).send(result)
+  } catch (error) {
+    console.error("Erreur lors de la resauvgarde du fournisseur avec nouveau fichier :", error);
+    res.status(500).send({
+      message: "Erreur lors de la resauvgarde du fournisseur avec nouveau fichier :",
+    });
+  }
+};
 
 
 
-export default { getFournisseurs ,getPlein ,createFournisseur, createListFourn };
+export default { getFournisseurs ,getPlein ,createFournisseur, createListFourn ,deleteContenu };
