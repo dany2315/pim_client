@@ -10,6 +10,9 @@ export const getPlein = async (req,res)  =>{
   try {
     const maCollection = mongoose.connection.collection(collectionName);
     const objet = await maCollection.findOne({})
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     if (objet) {
       res.status(200).send(true)
     }else{
@@ -61,7 +64,7 @@ export const createFournisseur = async (req, res) => {
   const { collectionName, data } = req.body;
 
   //fonction pour cree le resume du fournisseur dans la collection listecollections
-
+console.log("collectionName",collectionName);
   //recuperer les champs pour cree le fournisseur dans la Base de donne
   const keys = data.reduce((keys, obj) => {
     Object.keys(obj).forEach((key) => {
