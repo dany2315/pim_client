@@ -22,6 +22,7 @@ function Produits() {
 
   const [filtre, setFiltre] = useState("");
   const [produits, setproduits] = useState([]);
+  const [triPrix, setTriPrix] = useState("croissant");
 
   const onSearch = (reference) => {
     const res = getRef(reference);
@@ -33,9 +34,26 @@ function Produits() {
     setFiltre(event.target.value);
   };
 
+  const handleChangeTriPrix = (event) => {
+    setTriPrix(event.target.value);
+  };
+
   const produitsFiltres = produits.filter((produit) => {
     return produit.prix >= filtre;
   });
+
+
+  const trierProduits = (produits) => {
+    if (triPrix === "croissant") {
+      return produits.sort((a, b) => a.prix - b.prix);
+    } else if (triPrix === "decroissant") {
+      return produits.sort((a, b) => b.prix - a.prix);
+    } else {
+      return produits;
+    }
+  };
+
+  const produitsTries = trierProduits(produitsFiltres);
 
   return (
     <Container maxWidth="md" >
@@ -61,6 +79,21 @@ function Produits() {
                 <MenuItem value="">Tous les produits</MenuItem>
                 <MenuItem value="10">Prix >= 10€</MenuItem>
                 <MenuItem value="20">Prix >= 20€</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl sx={{ minWidth: 120, marginTop: "16px" }}>
+              <InputLabel id="select-tri-label">Tri</InputLabel>
+              <Select
+                labelId="select-tri-label"
+                id="select-tri"
+                value={triPrix}
+                onChange={handleChangeTriPrix}
+                label="Tri"
+              >
+                <MenuItem value="croissant">Prix croissant</MenuItem>
+                <MenuItem value="decroissant">Prix décroissant</MenuItem>
               </Select>
             </FormControl>
           </Grid>
