@@ -10,9 +10,10 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layaout />}>
-        <Route index element={<Fournisseurs />} />
+        <Route index element= {<Fournisseurs />}/>
         <Route path="rechercher" element={<Produits />}/>
         <Route path="fournisseur" element={<Fournisseur />} />
+        <Route path="newFournisseur" element={<NewFournisseur/>}/>
       </Route>
     </Routes>
   );

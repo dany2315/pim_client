@@ -2,6 +2,7 @@ import { Grid, Typography, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import Papa from "papaparse";
 import { useState, useEffect } from "react";
@@ -12,6 +13,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
   const [plein, setPlein] = useState(false);
   const collect = collectionName;
 
+  
  useEffect(() => {
     GetRempli();
   }, []);
@@ -29,7 +31,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
   };
 
   const handleReSave = async (event) => {
-    const updatedData = await handleFileUpload(event);
+    const updatedData = await handleFile(event);
     console.log("liste key names ", keyNames);
     console.log("liste fieldNames : ", fieldNames);
     console.log("data : ", updatedData);
@@ -64,10 +66,11 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     }
   };
 
-  const handleFileUpload = (event) => {
+  const handleFile = (e) => {
+    
     return new Promise((resolve, reject) => {
-      const file = event.target.files[0];
-      console.log(file);
+      const file = e.target.files[0];
+      console.log("du fournisseur",file);
       const reader = new FileReader();
 
       reader.onload = (e) => {
@@ -105,7 +108,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
             setKeyNames(propertyNames);
 
             console.log("donne filtrer :", filteredData);
-            console.log("nom de key du fichiers :", propertyNames);
+            console.log("keyNames :", propertyNames);
 
             resolve(filteredData); // Résoudre la promesse lorsque le traitement est terminé
           },
@@ -139,12 +142,23 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         direction="row"
         justifyContent="center"
         alignItems="center"
-        bgcolor={"white"}
+        
         p={1}
+        sx={{
+          backgroundColor: "white",
+          padding: "16px",
+          borderRadius: "8px",
+          transition: "box-shadow 0.3s ease",
+          boxShadow: "2px 2px 6px rgba(130, 206, 249, 1.5);",
+          "&:hover": {
+          boxShadow: "4px 4px 8px rgba(130, 206, 249, 2)",
+          
+        },
+      }}
       >
 
         <Grid item xs={4}>
-          <Typography variant="h5">{collectionName}</Typography>
+          <Typography variant="h7" fontFamily={"cursive"}>{collectionName}</Typography>
         </Grid>
 
         <Grid item xs={4} sx={{ borderLeft: "solid 1px", textAlign: "center" }}>
@@ -161,10 +175,23 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
         <Grid item xs={4} sx={{ borderLeft: "solid 1px", textAlign: "center" }}>
           {plein ? 
+           <IconButton
+           onClick={handleDelete}
+           sx={{
+            "&.MuiIconButton-root": {
+              borderRadius: "50%", // Définir le fond du IconButton comme rond, // Définir la couleur de fond comme rouge
+              " &:active": {
+              backgroundColor: "rgba(255, 0, 0, 0.2)", // Définir la couleur de fond au survol et au clic comme rouge
+              },
+            },
+    
+           }}
+         >
             <DeleteIcon
               sx={{ color: "red", "&:hover": { transform: "scale(1.1)" } }}
-              onClick={handleDelete}
+              
             />
+            </IconButton>
            : 
             <Box sx={{  textAlign: "center" }}>
               <div>
