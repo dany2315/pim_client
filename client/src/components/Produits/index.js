@@ -87,8 +87,8 @@ function Produits() {
                 label="Filtre"
               >
                 <MenuItem value="">Tous les produits</MenuItem>
-                <MenuItem value="7">Prix >= 7€</MenuItem>
-                <MenuItem value="20">Prix >= 20€</MenuItem>
+                <MenuItem value="7">Prix {'>'}= 7€</MenuItem>
+                <MenuItem value="20">Prix {'>'}= 20€</MenuItem>
               </Select>
             </FormControl>
           </Grid>
