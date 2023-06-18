@@ -5,18 +5,14 @@ import {
   Box,
   Button,
   Grid,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import FournisseurMobile from "../mobile/FournisseurMobile";
 import Fournisseur from "./Fournisseur";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
 
 function Fournisseurs() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [fournisseurs, setfournisseurs] = useState([]);
 
   
@@ -78,22 +74,10 @@ function Fournisseurs() {
             ) : (
               fournisseurs.map((fournisseur, index) => (
                 <Grid item xs={2} key={index}>
-                
-                    {isMobile ? (
-                      (console.log(isMobile),
-                      (
-                        <FournisseurMobile
-                          collectionName={fournisseur.collectionName}
-                          fieldNames={fournisseur.fieldNames}
-                        />
-                      ))
-                    ) : (
                       <Fournisseur
                         collectionName={fournisseur.collectionName}
                         fieldNames={fournisseur.fieldNames}
                       />
-                    )}
-                  
                 </Grid>
               ))
             )}

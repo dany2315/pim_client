@@ -72,10 +72,11 @@ function Produits() {
         <Grid
           container
           alignItems="center"
-          justifyContent="flex-end"
+          justifyContent={isMobile?"center":"flex-end"}
           spacing={2}
+          sx={{ marginLeft: 0 }}
         >
-          <Grid item>
+          <Grid item sx={{paddingLeft: "0px !important"}}>
             <FormControl sx={{ minWidth: 120, marginTop: "16px" }}>
               <InputLabel id="select-filtre-label">Filtre</InputLabel>
               <Select
@@ -133,10 +134,10 @@ function Produits() {
                 {isMobile ? (
                   console.log(isMobile),
                   <ProduitMobile
-                    reference={produit.reference}
-                    prix={produit.prix}
-                    disponibilite={produit.disponibilite}
-                    stock={produit.stock}
+                  collectionName={produit.nameFourn}
+                  reference={ref}
+                  prix={produit.produit.prix}
+                  stock={produit.produit.stock}
                   />
                 ) : (
                   <Produit

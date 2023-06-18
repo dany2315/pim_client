@@ -24,6 +24,7 @@ export const getProduits = async (req,res) =>{
 
       res.status(200).send(produitsNonNuls);
     } catch (error) {
+      console.log("Erreur lors recuperation des produit des fournisseur avec le nom du fourn : ",error);
        res.status(500).send(error);
     }
 

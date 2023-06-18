@@ -17,7 +17,10 @@ const disponibiliteStyle = {
   borderRadius: '5px',
 };
 
-function ProduitMobile({ reference, prix, disponibilite, stock }) {
+function ProduitMobile({ collectionName, prix,  stock  }) {
+
+  const disponibilite = stock > 0 ?true:false
+
   return (
     <Paper
       elevation={3}
@@ -30,9 +33,10 @@ function ProduitMobile({ reference, prix, disponibilite, stock }) {
       }}
     >
       <Typography variant="h6" sx={referenceStyle}>
-        {reference}
+        {collectionName}
       </Typography>
       <Typography variant="body1">Prix: {prix} €</Typography>
+      <Typography variant="body1">Stock: {stock}</Typography>
       <Typography
         variant="body1"
         sx={{
@@ -42,7 +46,7 @@ function ProduitMobile({ reference, prix, disponibilite, stock }) {
       >
         {disponibilite ? 'Disponible' : 'Indisponible'}
       </Typography>
-      <Typography variant="body1">Stock: {stock}</Typography>
+      
     </Paper>
   );
 }
