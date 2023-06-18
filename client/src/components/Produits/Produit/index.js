@@ -28,7 +28,7 @@ function Produit({ collectionName, prix,  stock }) {
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <Typography variant="subtitle1">{collectionName}</Typography>
+        <Typography variant="h6" sx={{fontWeight: 'bold'}}>{collectionName}</Typography>
         </Box>
         <Box sx={{ flex: 1 }}>
         <Typography variant="body1">{prix} €</Typography>
