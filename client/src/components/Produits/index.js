@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { getRef } from "../../controllers/getRef";
+import axios from "axios";
 import Search from "../Search";
 import ProduitMobile from "../mobile/ProduitMobile";
 import Produit from "./Produit";
@@ -23,11 +23,19 @@ function Produits() {
   const [filtre, setFiltre] = useState("");
   const [produits, setproduits] = useState([]);
   const [triPrix, setTriPrix] = useState("croissant");
+  const [ref, setRef] = useState("");
 
-  const onSearch = (reference) => {
-    const res = getRef(reference);
-    const allProduits = res
-    setproduits(allProduits);
+  const onSearch = async (reference) => {
+      setRef(reference)
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/produits/${reference}`
+        );
+        setproduits(response.data);
+      } catch (error) {
+        console.log(`erreur lors de la recuperations du produit ${reference} `, error);
+      }
+   
   };
 
   const handleChangeFiltre = (event) => {
@@ -39,15 +47,15 @@ function Produits() {
   };
 
   const produitsFiltres = produits.filter((produit) => {
-    return produit.prix >= filtre;
+    return produit.produit.prix >= filtre;
   });
 
 
   const trierProduits = (produits) => {
     if (triPrix === "croissant") {
-      return produits.sort((a, b) => a.prix - b.prix);
+      return produits.sort((a, b) => a.produit.prix - b.produit.prix);
     } else if (triPrix === "decroissant") {
-      return produits.sort((a, b) => b.prix - a.prix);
+      return produits.sort((a, b) => b.produit.prix - a.produit.prix);
     } else {
       return produits;
     }
@@ -59,7 +67,8 @@ function Produits() {
     <Container maxWidth="md" >
       <Typography variant="h5">Liste des resultats</Typography>
       <Search onSearch={onSearch} />
-      {produitsFiltres.length === 0? null:
+      {console.log(produitsFiltres)}
+      {produitsTries.length === 0? null:
         <Grid
           container
           alignItems="center"
@@ -77,7 +86,7 @@ function Produits() {
                 label="Filtre"
               >
                 <MenuItem value="">Tous les produits</MenuItem>
-                <MenuItem value="10">Prix >= 10€</MenuItem>
+                <MenuItem value="7">Prix >= 7€</MenuItem>
                 <MenuItem value="20">Prix >= 20€</MenuItem>
               </Select>
             </FormControl>
@@ -101,12 +110,12 @@ function Produits() {
       }
 
       <Grid container spacing={2} direction="column" sx={{ marginTop: "16px" }}>
-        {produitsFiltres.length === 0 ? (
+        {produitsTries.length === 0 ? (
           <Typography variant="body1">
             Aucun produit ne correspond aux critères de recherche.
           </Typography>
         ) : (
-          produitsFiltres.map((produit, index) => (
+          produitsTries.map((produit, index) => (
             <Grid item xs={12} sm={6} key={index}>
               <Box
                 sx={{
@@ -131,10 +140,10 @@ function Produits() {
                   />
                 ) : (
                   <Produit
-                    reference={produit.reference}
-                    prix={produit.prix}
-                    disponibilite={produit.disponibilite}
-                    stock={produit.stock}
+                    collectionName={produit.nameFourn}
+                    reference={ref}
+                    prix={produit.produit.prix}
+                    stock={produit.produit.stock}
                   />
                 )}
               </Box>

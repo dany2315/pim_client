@@ -6,9 +6,9 @@ const router = express.Router();
 
 //http://localhost:5000/api
 
-router.use('/',produitRoutes);
-router.use('/fournisseur',fournisseurRoutes)
-router.post('auth',)
+router.use('/produits',produitRoutes);
+router.use('/fournisseur',fournisseurRoutes);
+router.post('auth',);
 
 
 export default router

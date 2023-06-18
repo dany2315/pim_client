@@ -24,7 +24,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         `http://localhost:5000/api/fournisseur/${collect}`
       );
       setPlein(reponse.data);
-      console.log(`repnse data ${collect} `, reponse.data);
+      console.log(`reponse data ${collect} `, reponse.data);
     } catch (error) {
       console.log("erreur lors de la recup plein ", error);
     }

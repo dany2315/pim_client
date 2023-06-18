@@ -7,12 +7,11 @@ import ListFourn from "../models/modelListFourn.js";
 export const getPlein = async (req,res)  =>{
 
   const collectionName = req.params.id;
+  console.log(collectionName);
   try {
     const maCollection = mongoose.connection.collection(collectionName);
     const objet = await maCollection.findOne({})
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.setHeader("Pragma", "no-cache");
-    res.setHeader("Expires", "0");
+  
     if (objet) {
       res.status(200).send(true)
     }else{
@@ -31,9 +30,6 @@ export const getPlein = async (req,res)  =>{
 export const getFournisseurs = async (req, res) => {
   try {
     const fournisseurs = await ListFourn.find({ fieldNames: { $ne: [] } });
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.setHeader("Pragma", "no-cache");
-    res.setHeader("Expires", "0");
     res.status(200).send(fournisseurs);
     console.log("fourn",fournisseurs);
   } catch (err) {

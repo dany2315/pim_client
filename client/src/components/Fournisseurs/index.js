@@ -26,7 +26,7 @@ function Fournisseurs() {
         const response = await axios.get(
           "http://localhost:5000/api/fournisseur"
         );
-        console.log("azert", response.data);
+        console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
       } catch (error) {
         console.log("erreur lors de la recuperations des fournisseurs", error);

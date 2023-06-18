@@ -37,8 +37,8 @@ const NameChamp = ({ keyName, index, onNameChange, modifiedNames }) => {
               onChange={(e) => onNameChange(e, index)}
             >
               <MenuItem value="">Aucun changement</MenuItem>
-              <MenuItem value="SKU">SKU</MenuItem>
               <MenuItem value="reference">reference</MenuItem>
+              <MenuItem value="stock">stock</MenuItem>
               <MenuItem value="prix">prix</MenuItem>
               <MenuItem value="indispenssable">indispenssable</MenuItem>
               

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 
 const disponibiliteStyle = {
@@ -7,7 +7,11 @@ const disponibiliteStyle = {
   borderRadius: '5px',
 };
 
-function Produit({ reference, prix, disponibilite, stock }) {
+function Produit({ collectionName, prix,  stock }) {
+
+  const disponibilite = stock > 0 ?true:false
+  
+
   return (
     <Box
       sx={{
@@ -24,13 +28,13 @@ function Produit({ reference, prix, disponibilite, stock }) {
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <Typography variant="subtitle1">{reference}</Typography>
+        <Typography variant="subtitle1">{collectionName}</Typography>
         </Box>
         <Box sx={{ flex: 1 }}>
         <Typography variant="body1">{prix} €</Typography>
       </Box>
       <Box sx={{ flex: 1 }}>
-        <Typography variant="body2">Stock: {stock}</Typography>
+        <Typography variant="body2">{stock} ARTICLES</Typography>
       </Box>
       <Box sx={{ flex: 1 }}>
        <Typography

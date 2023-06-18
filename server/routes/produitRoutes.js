@@ -1,11 +1,11 @@
 import express  from "express";
-import { getAllProduits } from "../controller/produitController.js"
+import { getProduits } from "../controller/produitController.js"
 
 const router = express.Router();
 
-//http://localhost:5000/api
+//http://localhost:5000/api/produits
 
-router.get('/',getAllProduits);
+router.get('/:reference',getProduits);
 
 
 
