@@ -1,4 +1,5 @@
 import express from "express";
+import 'dotenv/config'
 import cors from "cors";
 import mongoose from "mongoose";
 import morgan from "morgan";
@@ -7,7 +8,14 @@ import User from "./models/modelUser.js";
 import bodyParser from 'body-parser'
 
 //connection mongoDB localhost
-const CONNECTION_URL = "mongodb://localhost:27017/admin";
+const ENV = process.env.ENV
+const DATABASE_NAME = process.env.DATABASE_NAME;
+const URL_DATABASE = process.env.URL_DATABASE
+const PORT = process.env.PORT 
+console.log(ENV);
+
+
+const CONNECTION_URL = `${URL_DATABASE}${DATABASE_NAME}`;
 
 mongoose.set("strictQuery", false);
 mongoose
@@ -15,7 +23,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log(`connect to mongoDB`))
+  .then(() => console.log(`connect to mongoDB: ${ENV}`))
 
   .catch((error) =>
     console.log("probleme de connexion a mongoDB " + error.message)
@@ -23,7 +31,7 @@ mongoose
 
 //server express URL: http://localhost:5000/api
 const app = express();
-const PORT = process.env.PORT || 5000;
+
 //use body parser pour pouvoir augmenter la limite de transfere
 app.use(bodyParser.json({ limit: '10mb' }));
 //use cors
@@ -39,7 +47,6 @@ app.use((req, res, next) => {
 });
 app.use("/api", router);
 
-app.get("/", (req, res) => res.send("Hello World!"));
 
 //http://localhost:5000/auth  autentification
 app.post("/auth", async (req, res) => {
@@ -65,4 +72,4 @@ app.post("/auth", async (req, res) => {
 
 
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+app.listen(PORT, () => console.log(`Le serveur de ${ENV} tourne dans le port ${PORT}!`));
