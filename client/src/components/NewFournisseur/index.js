@@ -13,7 +13,7 @@ import {
 import Loading from "../Loading";
 import NameChamp from "./NameChamp";
 import { useNavigate } from "react-router-dom";
-
+ 
 const NewFournisseur = () => {
   const [fileNew, setFileNew] = useState([]);
   const [dataNew, setDataNew] = useState([]);
