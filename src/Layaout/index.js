@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 
 const Layaout = () =>{
 
-return (
+return ( 
     <>
       <Navbar />
 
