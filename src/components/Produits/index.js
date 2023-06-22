@@ -29,7 +29,7 @@ function Produits() {
       setRef(reference)
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/produits/${reference}`
+          `http://server.jcloud-ver-jpe.ik-server.com/api/produits/${reference}`
         );
         setproduits(response.data);
       } catch (error) {

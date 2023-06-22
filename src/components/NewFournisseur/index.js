@@ -92,7 +92,7 @@ const NewFournisseur = () => {
       console.log("upKeyNames :", upKeyNames);
 
       // Appel à l'API pour sauvegarder les données
-      await axios.post("http://localhost:5000/api/fournisseur/new", {
+      await axios.post("http://server.jcloud-ver-jpe.ik-server.com/api/fournisseur/new", {
         collectionName: resultName,
         data: updateDatascop,
         fieldNames: upKeyNames,
@@ -100,7 +100,7 @@ const NewFournisseur = () => {
 
       try {
         const result = await axios.post(
-          "http://localhost:5000/api/fournisseur/newFourn",
+          "http://server.jcloud-ver-jpe.ik-server.com/fournisseur/newFourn",
           {
             collectionName: resultName,
             fieldNames: upKeyNames,
