@@ -15,12 +15,12 @@ function Fournisseurs() {
 
   const [fournisseurs, setfournisseurs] = useState([]);
 
-  
+
   useEffect(() => {
     const fetchFournisseur = async () => {
       try {
         const response = await axios.get(
-          "http://server.jcloud-ver-jpe.ik-server.com/api/fournisseur"
+          "https://node127470-server.jcloud-ver-jpe.ik-server.com/api/fournisseur"
         );
         console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
