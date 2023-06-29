@@ -20,7 +20,7 @@ const Footer = () => {
       </Typography>
       <Typography variant="body2" color="textSecondary" sx={{ marginLeft: isMobile ? 0 : '16px' }}>
         Contact :{' '}
-        <Link href="mailto:contact@societe.com" color="inherit">
+        <Link href="mailto:eserfaty@ncsfrance.com" color="inherit">
           eserfaty@ncsfrance.com
         </Link>
       </Typography>

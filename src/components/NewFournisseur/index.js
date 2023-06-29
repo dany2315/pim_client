@@ -81,7 +81,7 @@ const NewFournisseur = () => {
           }
         });
         upKeyNames.forEach((updatedKey, index) => {
-          if (updatedKey === "indispenssable") {
+          if (updatedKey === "non_necessaire") {
             delete updatedItem[index]; // Supprimer la clé
             delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
           }
@@ -92,7 +92,7 @@ const NewFournisseur = () => {
       console.log("upKeyNames :", upKeyNames);
 
       // Appel à l'API pour sauvegarder les données
-      await axios.post("http://server.jcloud-ver-jpe.ik-server.com/api/fournisseur/new", {
+      await axios.post("https://pim-nyun.onrender.com/api/fournisseur/new", {
         collectionName: resultName,
         data: updateDatascop,
         fieldNames: upKeyNames,
@@ -100,7 +100,7 @@ const NewFournisseur = () => {
 
       try {
         const result = await axios.post(
-          "http://server.jcloud-ver-jpe.ik-server.com/fournisseur/newFourn",
+          "https://pim-nyun.onrender.com/fournisseur/newFourn",
           {
             collectionName: resultName,
             fieldNames: upKeyNames,
