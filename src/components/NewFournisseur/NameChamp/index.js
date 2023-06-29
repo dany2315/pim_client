@@ -40,7 +40,7 @@ const NameChamp = ({ keyName, index, onNameChange, modifiedNames }) => {
               <MenuItem value="reference">reference</MenuItem>
               <MenuItem value="stock">stock</MenuItem>
               <MenuItem value="prix">prix</MenuItem>
-              <MenuItem value="indispenssable">indispenssable</MenuItem>
+              <MenuItem value="non_necessaire">non necessaire</MenuItem>
               
 
             </Select>
