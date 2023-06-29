@@ -20,7 +20,7 @@ function Fournisseurs() {
     const fetchFournisseur = async () => {
       try {
         const response = await axios.get(
-          "https://server.jcloud-ver-jpe.ik-server.com/api/fournisseur"
+          "https://pim-nyun.onrender.com/api/fournisseur"
         );
         console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
