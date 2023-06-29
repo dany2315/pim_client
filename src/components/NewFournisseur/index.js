@@ -98,8 +98,8 @@ const NewFournisseur = () => {
         fieldNames: upKeyNames,
       });
 
-      try {
-        const result = await axios.post(
+
+      const result = await axios.post(
           "https://pim-nyun.onrender.com/fournisseur/newFourn",
           {
             collectionName: resultName,
@@ -112,12 +112,8 @@ const NewFournisseur = () => {
         navigate(-1);
 
         console.log("Données sauvegardées avec succès dans listFourn!");
-      } catch (error) {
-        console.error(
-          "Erreur lors de la sauvegarde des données listeFourn :",
-          error
-        );
-      }
+     
+      
       console.log("Données sauvegardées avec succès !");
     } catch (error) {
       console.error("Erreur lors de la sauvegarde des données :", error);
