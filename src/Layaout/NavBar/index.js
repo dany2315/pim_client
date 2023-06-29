@@ -91,7 +91,6 @@ function Navbar() {
             component={NavLink}
             onClick={handleClose}
             to={menuArray.path}
-            
             sx={{
               ...menuLinkStyles,
               '&.active': {
