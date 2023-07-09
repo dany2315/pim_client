@@ -100,7 +100,7 @@ const NewFournisseur = () => {
 
 
       const result = await axios.post(
-          "https://pim-nyun.onrender.com/fournisseur/newFourn",
+          "https://pim-nyun.onrender.com/api/fournisseur/newFourn",
           {
             collectionName: resultName,
             fieldNames: upKeyNames,
