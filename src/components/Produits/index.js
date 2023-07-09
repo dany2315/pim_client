@@ -29,7 +29,7 @@ function Produits() {
       setRef(reference)
       try {
         const response = await axios.get(
-          `https://pim-nyun.onrender.com/api/produits/${reference}`
+          `https://env-mango.jcloud-ver-jpe.ik-server.com/api/produits/${reference}`
         );
         setproduits(response.data);
       } catch (error) {
