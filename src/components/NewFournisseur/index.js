@@ -62,16 +62,16 @@ const NewFournisseur = () => {
     try {
       setIsLoading(true);
       const resultName = handleS(nameCollect);
-
+  
       console.log("azerty", resultName);
-
+  
       const upKeyNames = keyNamesNew.map((keyName, index) => {
         if (modifiedNames.hasOwnProperty(index)) {
           return modifiedNames[index];
         }
         return keyName;
       });
-
+  
       const updateDatascop = dataNew.map((item) => {
         const updatedItem = {};
         Object.keys(item).forEach((key, index) => {
@@ -90,40 +90,39 @@ const NewFournisseur = () => {
       });
       setUpdatedData(updateDatascop);
       console.log("upKeyNames :", upKeyNames);
-
+  
       // Appel à l'API pour sauvegarder les données
-      await axios.post("https://pim-nyun.onrender.com/api/fournisseur/new", {
-        collectionName: resultName,
-        data: updateDatascop,
-        fieldNames: upKeyNames,
-      });
-
-
-      const result = await axios.post(
-          "https://pim-nyun.onrender.com/api/fournisseur/newFourn",
-          {
-            collectionName: resultName,
-            fieldNames: upKeyNames,
-          }
-        );
-        setIsLoading(false);
-
-        console.log("result newfourn :", result);
-        navigate(-1);
-
-        console.log("Données sauvegardées avec succès dans listFourn!");
-     
-      
+      await Promise.all([
+        axios.post("https://pim-nyun.onrender.com/api/fournisseur/new", {
+          collectionName: resultName,
+          data: updateDatascop,
+          fieldNames: upKeyNames,
+        }).catch((error) => {
+          throw new Error("Erreur lors de la sauvegarde des données dans newFourn: " + error);
+        }),
+        axios.post("https://pim-nyun.onrender.com/api/fournisseur/newFourn", {
+          collectionName: resultName,
+          fieldNames: upKeyNames,
+        }).catch((error) => {
+          throw new Error("Erreur lors de la sauvegarde des données dans listFourn: " + error);
+        }),
+      ]);
+  
+      setIsLoading(false);
       console.log("Données sauvegardées avec succès !");
+      navigate(-1);
+  
+      console.log("Données sauvegardées avec succès dans listFourn!");
     } catch (error) {
       console.error("Erreur lors de la sauvegarde des données :", error);
     }
-
+  
     console.log(updatedData);
     console.log("Data  :", dataNew);
     console.log("keyNames :", keyNamesNew);
     console.log("Data mis à jour :", updatedData);
   };
+  
 
   //fonction pour upload le fichier csv grace a papaparse
   const handleFileUpload = (event) => {
