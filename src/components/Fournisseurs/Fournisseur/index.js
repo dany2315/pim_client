@@ -46,7 +46,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         }
       });
       fieldNames.forEach((updatedKey, index) => {
-        if (updatedKey === "indispenssable") {
+        if (updatedKey === "non_necessaire") {
           delete updatedItem[index]; // Supprimer la clé
           delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
         }
