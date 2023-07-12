@@ -21,7 +21,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
   const GetRempli = async () => {
     try {
       const reponse = await axios.get(
-        `https://env-mango.jcloud-ver-jpe.ik-server.com:5000/api/fournisseur/${collect}`
+        `https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/${collect}`
       );
       setPlein(reponse.data);
       console.log(`reponse data ${collect} `, reponse.data);
@@ -55,7 +55,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     });
 
     try {
-      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com:5000/api/fournisseur/resave", {
+      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/resave", {
         data: updateDatascop,
         collectionName: collectionName,
       });
@@ -125,7 +125,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const handleDelete = async() =>{
     try {
-      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com:5000/api/fournisseur/deleteId", {
+      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/deleteId", {
         collectionName: collect,
       });
       console.log("reponse a la suppresssion : ",response.data);
