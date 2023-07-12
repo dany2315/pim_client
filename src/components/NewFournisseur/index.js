@@ -96,7 +96,6 @@ const NewFournisseur = () => {
         axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/new", {
           collectionName: resultName,
           data: updateDatascop,
-          fieldNames: upKeyNames,
         }).catch((error) => {
           throw new Error("Erreur lors de la sauvegarde des données dans newFourn: " + error);
         }),
