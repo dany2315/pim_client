@@ -93,14 +93,14 @@ const NewFournisseur = () => {
   
       // Appel à l'API pour sauvegarder les données
       await Promise.all([
-        axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com:5000/api/fournisseur/new", {
+        axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/new", {
           collectionName: resultName,
           data: updateDatascop,
           fieldNames: upKeyNames,
         }).catch((error) => {
           throw new Error("Erreur lors de la sauvegarde des données dans newFourn: " + error);
         }),
-        axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com:5000/api/fournisseur/newFourn", {
+        axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/newFourn", {
           collectionName: resultName,
           fieldNames: upKeyNames,
         }).catch((error) => {

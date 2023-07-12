@@ -20,7 +20,7 @@ function Fournisseurs() {
     const fetchFournisseur = async () => {
       try {
         const response = await axios.get(
-          "https://env-mango.jcloud-ver-jpe.ik-server.com:5000/api/fournisseur"
+          "https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur"
         );
         console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
