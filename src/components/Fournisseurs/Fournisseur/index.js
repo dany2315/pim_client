@@ -1,14 +1,19 @@
-import { Grid, Typography, Box, Button } from "@mui/material";
+import { Grid, Typography, Box, Button  } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
+import Loading from '../../Loading';
+import Pop from "../../Pop";
 import axios from "axios";
 import Papa from "papaparse";
 import { useState, useEffect } from "react";
 
 const Fournisseur = ({ collectionName, fieldNames }) => {
-
+  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState("")
+  const [open, setOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [keyNames, setKeyNames] = useState([]);
   const [plein, setPlein] = useState(false);
   const collect = collectionName;
@@ -30,8 +35,17 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     }
   };
 
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   const handleReSave = async (event) => {
     const updatedData = await handleFile(event);
+    setIsLoading(true)
     console.log("liste key names ", keyNames);
     console.log("liste fieldNames : ", fieldNames);
     console.log("data : ", updatedData);
@@ -60,8 +74,17 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         collectionName: collectionName,
       });
     console.log("succes resauvgarde ",response.data);
+      setIsLoading(false)
+      setStatus("success")
+      setMessage("Mise a niveau effectuer !")
+      setOpen(true)
       setPlein(true)
     } catch (error) {
+      setIsLoading(false)
+      setStatus("error")
+      setMessage("Mise a niveau echouer !")
+      setOpen(true)
+      setPlein(true)
       console.error("Erreur lors de la resauvegarde des données :", error);
     }
   };
@@ -125,18 +148,27 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const handleDelete = async() =>{
     try {
+      setIsLoading(true)
       const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/deleteId", {
         collectionName: collect,
       });
       console.log("reponse a la suppresssion : ",response.data);
       setPlein(false)
+      setIsLoading(false)
+      setStatus("success")
+      setMessage("Suppression effectuer !")
+      setOpen(true)
     } catch (error) {
+      setIsLoading(false)
+      setStatus("error")
+      setMessage("Suppression echouer !")
+      setOpen(true)
       console.error(`Erreur lors de la supprime du contenu de ${collect} :`, error);
     }
   }
 
   return (
-    <>
+    <> 
       <Grid
         container
         direction="row"
@@ -220,6 +252,8 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
           }
         </Grid>
       </Grid>
+      {isLoading ? <Loading />:null}
+      <Pop open={open} message={message} handleClose={handleClose} status={status}/>
     </>
   );
 };

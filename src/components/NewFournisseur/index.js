@@ -8,8 +8,9 @@ import {
   Button,
   Typography,
   Container,
-  Box,
+  Box
 } from "@mui/material";
+import Pop from "../Pop";
 import Loading from "../Loading";
 import NameChamp from "./NameChamp";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +27,19 @@ const NewFournisseur = () => {
   const [updatedData, setUpdatedData] = useState([]);
   const [nameCollect, setNameCollect] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState("")
+
+
   const navigate = useNavigate();
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   const handleChange = (e) => {
     const nameFourn = e.target.value;
@@ -97,17 +110,29 @@ const NewFournisseur = () => {
           collectionName: resultName,
           data: updateDatascop,
         }).catch((error) => {
+          setIsLoading(false)
+          setStatus("error")
+          setOpen(true)
+          setMessage("Fournisseur non sauvegarder !!")
           throw new Error("Erreur lors de la sauvegarde des données dans newFourn: " + error);
+          
         }),
         axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/newFourn", {
           collectionName: resultName,
           fieldNames: upKeyNames,
         }).catch((error) => {
+          setIsLoading(false)
+          setStatus("error")
+          setOpen(true)
+          setMessage("Fournisseur non sauvegarder dans la liste !!")
           throw new Error("Erreur lors de la sauvegarde des données dans listFourn: " + error);
         }),
       ]);
   
       setIsLoading(false);
+      setOpen(true)
+      setStatus("success")
+      setMessage("Nouveau fournisseur enregistrer !")
       console.log("Données sauvegardées avec succès !");
       navigate(-1);
   
@@ -169,6 +194,7 @@ const NewFournisseur = () => {
           console.log("nom de key :", propertyNames);
         },
         error: (error) => {
+          
           console.error("Erreur lors de l'analyse du fichier CSV :", error);
         },
       });
@@ -179,9 +205,7 @@ const NewFournisseur = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Loading />
-      ) : (
+     
         <Container maxWidth="md">
           {keyNamesNew.length === 0 ? (
             <Box sx={{ textAlign: "center" }}>
@@ -319,7 +343,8 @@ const NewFournisseur = () => {
 )}
           {console.log(updatedData)}
         </Container>
-      )}
+        {isLoading ? <Loading />:null}
+        <Pop open={open} message={message} handleClose={handleClose} status={status}/>
     </>
   );
 };
