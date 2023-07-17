@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import {
   Typography,
   Container,
@@ -6,10 +6,10 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import Fournisseur from "./Fournisseur";
-import axios from "axios";
-import { NavLink } from "react-router-dom";
 
+import Fournisseur from "./Fournisseur";
+import { NavLink } from "react-router-dom";
+import api from "../../utils/Axios";
 
 function Fournisseurs() {
 
@@ -19,9 +19,7 @@ function Fournisseurs() {
   useEffect(() => {
     const fetchFournisseur = async () => {
       try {
-        const response = await axios.get(
-          "https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur"
-        );
+        const response = await api.get("/fournisseur");
         console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
       } catch (error) {
@@ -33,7 +31,7 @@ function Fournisseurs() {
   }, []);
 
 
-
+ 
 
   return (
     

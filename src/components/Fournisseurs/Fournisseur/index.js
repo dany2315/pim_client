@@ -4,20 +4,18 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
 import Loading from '../../Loading';
-import Pop from "../../Pop";
-import axios from "axios";
+import api from "../../../utils/Axios";
 import Papa from "papaparse";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
+import {SnackbarContext} from "../../../context/snackbarContext"
 
 const Fournisseur = ({ collectionName, fieldNames }) => {
-  const [message, setMessage] = useState("")
-  const [status, setStatus] = useState("")
-  const [open, setOpen] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false);
   const [keyNames, setKeyNames] = useState([]);
   const [plein, setPlein] = useState(false);
   const collect = collectionName;
-
+  const { showSnackbar } = useContext(SnackbarContext);
   
  useEffect(() => {
     GetRempli();
@@ -25,8 +23,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const GetRempli = async () => {
     try {
-      const reponse = await axios.get(
-        `https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/${collect}`
+      const reponse = await api.get(`/fournisseur/${collect}`
       );
       setPlein(reponse.data);
       console.log(`reponse data ${collect} `, reponse.data);
@@ -35,13 +32,6 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     }
   };
 
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
 
   const handleReSave = async (event) => {
     const updatedData = await handleFile(event);
@@ -69,21 +59,17 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     });
 
     try {
-      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/resave", {
+      const response = await api.post("/fournisseur/resave", {
         data: updateDatascop,
         collectionName: collectionName,
       });
     console.log("succes resauvgarde ",response.data);
       setIsLoading(false)
-      setStatus("success")
-      setMessage("Mise a niveau effectuer !")
-      setOpen(true)
+      showSnackbar("Mise a niveau effectuer !","success")
       setPlein(true)
     } catch (error) {
       setIsLoading(false)
-      setStatus("error")
-      setMessage("Mise a niveau echouer !")
-      setOpen(true)
+      showSnackbar("Mise a niveau echouer !","error")
       setPlein(true)
       console.error("Erreur lors de la resauvegarde des données :", error);
     }
@@ -149,20 +135,16 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
   const handleDelete = async() =>{
     try {
       setIsLoading(true)
-      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/deleteId", {
+      const response = await api.post("/fournisseur/deleteId", {
         collectionName: collect,
       });
       console.log("reponse a la suppresssion : ",response.data);
       setPlein(false)
       setIsLoading(false)
-      setStatus("success")
-      setMessage("Suppression effectuer !")
-      setOpen(true)
+      showSnackbar("Suppression effectuer !","success")
     } catch (error) {
       setIsLoading(false)
-      setStatus("error")
-      setMessage("Suppression echouer !")
-      setOpen(true)
+      showSnackbar("Suppression echouer !","error")
       console.error(`Erreur lors de la supprime du contenu de ${collect} :`, error);
     }
   }
@@ -253,7 +235,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         </Grid>
       </Grid>
       {isLoading ? <Loading />:null}
-      <Pop open={open} message={message} handleClose={handleClose} status={status}/>
+     
     </>
   );
 };

@@ -1,20 +1,20 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState , useContext  } from "react";
+import api from "../../utils/Axios";
 import Papa from "papaparse";
 import {
   TextField,
   FormHelperText,
-  Grid, 
+  Grid,
   Button,
   Typography,
   Container,
-  Box
+  Box,
 } from "@mui/material";
-import Pop from "../Pop";
+import {SnackbarContext} from "../../context/snackbarContext";
 import Loading from "../Loading";
 import NameChamp from "./NameChamp";
 import { useNavigate } from "react-router-dom";
- 
+
 const NewFournisseur = () => {
   const [fileNew, setFileNew] = useState([]);
   const [dataNew, setDataNew] = useState([]);
@@ -27,19 +27,10 @@ const NewFournisseur = () => {
   const [updatedData, setUpdatedData] = useState([]);
   const [nameCollect, setNameCollect] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false)
-  const [message, setMessage] = useState("")
-  const [status, setStatus] = useState("")
-
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const navigate = useNavigate();
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
 
   const handleChange = (e) => {
     const nameFourn = e.target.value;
@@ -75,16 +66,16 @@ const NewFournisseur = () => {
     try {
       setIsLoading(true);
       const resultName = handleS(nameCollect);
-  
+
       console.log("azerty", resultName);
-  
+
       const upKeyNames = keyNamesNew.map((keyName, index) => {
         if (modifiedNames.hasOwnProperty(index)) {
           return modifiedNames[index];
         }
         return keyName;
       });
-  
+
       const updateDatascop = dataNew.map((item) => {
         const updatedItem = {};
         Object.keys(item).forEach((key, index) => {
@@ -103,50 +94,49 @@ const NewFournisseur = () => {
       });
       setUpdatedData(updateDatascop);
       console.log("upKeyNames :", upKeyNames);
-  
+
       // Appel à l'API pour sauvegarder les données
       await Promise.all([
-        axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/new", {
-          collectionName: resultName,
-          data: updateDatascop,
-        }).catch((error) => {
-          setIsLoading(false)
-          setStatus("error")
-          setOpen(true)
-          setMessage("Fournisseur non sauvegarder !!")
-          throw new Error("Erreur lors de la sauvegarde des données dans newFourn: " + error);
-          
-        }),
-        axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/newFourn", {
-          collectionName: resultName,
-          fieldNames: upKeyNames,
-        }).catch((error) => {
-          setIsLoading(false)
-          setStatus("error")
-          setOpen(true)
-          setMessage("Fournisseur non sauvegarder dans la liste !!")
-          throw new Error("Erreur lors de la sauvegarde des données dans listFourn: " + error);
-        }),
+        api
+          .post("/fournisseur/new", {
+            collectionName: resultName,
+            data: updateDatascop,
+          })
+          .catch((error) => {
+            setIsLoading(false);
+            showSnackbar("Fournisseur non sauvegarder !!","error")
+            throw new Error(
+              "Erreur lors de la sauvegarde des données dans newFourn: " + error
+            );
+          }),
+        api
+          .post("/fournisseur/newFourn", {
+            collectionName: resultName,
+            fieldNames: upKeyNames,
+          })
+          .catch((error) => {
+            setIsLoading(false);
+            showSnackbar("Fournisseur non sauvegarder dans la liste !!","error")
+            throw new Error(
+              "Erreur lors de la sauvegarde des données dans listFourn: " +
+                error
+            );
+          }),
       ]);
-  
       setIsLoading(false);
-      setOpen(true)
-      setStatus("success")
-      setMessage("Nouveau fournisseur enregistrer !")
+      showSnackbar("Nouveau fournisseur enregistrer !","success")
       console.log("Données sauvegardées avec succès !");
       navigate(-1);
-  
       console.log("Données sauvegardées avec succès dans listFourn!");
     } catch (error) {
       console.error("Erreur lors de la sauvegarde des données :", error);
     }
-  
+
     console.log(updatedData);
     console.log("Data  :", dataNew);
     console.log("keyNames :", keyNamesNew);
     console.log("Data mis à jour :", updatedData);
   };
-  
 
   //fonction pour upload le fichier csv grace a papaparse
   const handleFileUpload = (event) => {
@@ -194,7 +184,6 @@ const NewFournisseur = () => {
           console.log("nom de key :", propertyNames);
         },
         error: (error) => {
-          
           console.error("Erreur lors de l'analyse du fichier CSV :", error);
         },
       });
@@ -205,35 +194,34 @@ const NewFournisseur = () => {
 
   return (
     <>
-     
-        <Container maxWidth="md">
-          {keyNamesNew.length === 0 ? (
-            <Box sx={{ textAlign: "center" }}>
-              <div>
-                <label htmlFor="file-upload">
-                  <input
-                    id="file-upload"
-                    type="file"
-                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                    style={{ display: "none" }}
-                    onChange={handleFileUpload}
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    sx={{
-                      borderRadius: "20px",
-                      backgroundColor: "#82CEF9",
-                      color: "white",
-                    }}
-                  >
-                    <div>Choose File</div>
-                  </Button>
-                </label>
-              </div>
-            </Box>
-          ) : (
-            <>
+      <Container maxWidth="md">
+        {keyNamesNew.length === 0 ? (
+          <Box sx={{ textAlign: "center" }}>
+            <div>
+              <label htmlFor="file-upload">
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  style={{ display: "none" }}
+                  onChange={handleFileUpload}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  sx={{
+                    borderRadius: "20px",
+                    backgroundColor: "#82CEF9",
+                    color: "white",
+                  }}
+                >
+                  <div>Choose File</div>
+                </Button>
+              </label>
+            </div>
+          </Box>
+        ) : (
+          <>
             <Box sx={{ marginBottom: 2, textAlign: "center" }}>
               <Button
                 variant="outlined"
@@ -251,100 +239,102 @@ const NewFournisseur = () => {
                 {fileNew.name}
               </Button>
             </Box>
-          
 
-          <Grid container>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              sx={{ textAlign: "center", marginTop: 3 }}
-            >
-              <Typography variant="h5" color={"#82CEF9"} fontFamily={"cursive"}>
-                Liste des champs du fichier CSV importer
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              x={{ textAlign: "center", marginBottom: 3 }}
-            >
-              <Box
-                component="form"
-                sx={{
-                  //fontFamily:"cursive",
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                noValidate
-                autoComplete="off"
-                onChange={(e) => handleChange(e)}
+            <Grid container>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                sx={{ textAlign: "center", marginTop: 3 }}
               >
-                <TextField
-                  id="filled-search"
-                  label="nom du fournisseur"
-                  variant="standard"
-                  size="small"
-                  sx={{
-                    color: "#82CEF9 !important", // Changer la couleur du texte ici
-                    "& .MuiInputLabel-root": {
-                      color: "#82CEF9 !important", // Changer la couleur du label ici
-                    },
-                    "& .MuiInputBase-input": {
-                      color: "#82CEF9 !important", // Changer la couleur de l'input ici
-                    },
-                    "& .MuiInput-underline:after": {
-                      borderBottomColor: "#82CEF9 !important", // Changer la couleur de la barre du bas
-                    },
-                    "& .Mui-focused": {
-                      color: "#82CEF9 !important", // Changer la couleur lorsque le champ est en focus
-                      "& .MuiInputLabel-root": {
-                        color: "#82CEF9 !important", // Changer la couleur du label lorsque le champ est en focus
-                      },
-                    },
-                  }}
-                />
-                <FormHelperText
-                  id="component-helper-text"
-                  sx={{
-                    marginTop: "0 !important",
-                    fontFamily: "cursive",
-                    color: "#82CEF9",
-                  }}
+                <Typography
+                  variant="h5"
+                  color={"#82CEF9"}
+                  fontFamily={"cursive"}
                 >
-                  Mettre que des minuscules
-                </FormHelperText>
-              </Box>
-            </Grid>
+                  Liste des champs du fichier CSV importer
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                x={{ textAlign: "center", marginBottom: 3 }}
+              >
+                <Box
+                  component="form"
+                  sx={{
+                    //fontFamily:"cursive",
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                  onChange={(e) => handleChange(e)}
+                >
+                  <TextField
+                    id="filled-search"
+                    label="nom du fournisseur"
+                    variant="standard"
+                    size="small"
+                    sx={{
+                      color: "#82CEF9 !important", // Changer la couleur du texte ici
+                      "& .MuiInputLabel-root": {
+                        color: "#82CEF9 !important", // Changer la couleur du label ici
+                      },
+                      "& .MuiInputBase-input": {
+                        color: "#82CEF9 !important", // Changer la couleur de l'input ici
+                      },
+                      "& .MuiInput-underline:after": {
+                        borderBottomColor: "#82CEF9 !important", // Changer la couleur de la barre du bas
+                      },
+                      "& .Mui-focused": {
+                        color: "#82CEF9 !important", // Changer la couleur lorsque le champ est en focus
+                        "& .MuiInputLabel-root": {
+                          color: "#82CEF9 !important", // Changer la couleur du label lorsque le champ est en focus
+                        },
+                      },
+                    }}
+                  />
+                  <FormHelperText
+                    id="component-helper-text"
+                    sx={{
+                      marginTop: "0 !important",
+                      fontFamily: "cursive",
+                      color: "#82CEF9",
+                    }}
+                  >
+                    Mettre que des minuscules
+                  </FormHelperText>
+                </Box>
+              </Grid>
 
-            {keyNamesNew.map((keyName, index) => (
-              <>
-                {console.log("liste modifiedNames objet:", modifiedNames)}
-                {console.log("liste updateData array:", updatedData)}
+              {keyNamesNew.map((keyName, index) => (
+                <>
+                  {console.log("liste modifiedNames objet:", modifiedNames)}
+                  {console.log("liste updateData array:", updatedData)}
 
-                <NameChamp
-                  keyName={keyName}
-                  index={index}
-                  onNameChange={handleNameChange}
-                  modifiedNames={modifiedNames}
-                />
-              </>
-            ))}
-            <Grid
-              item
-              xs={12}
-              sm={14}
-              sx={{ textAlign: { sm: "center" }, mt: 5 }}
-            >
-              <Button onClick={handleSave}>sauvgarder</Button>
+                  <NameChamp
+                    keyName={keyName}
+                    index={index}
+                    onNameChange={handleNameChange}
+                    modifiedNames={modifiedNames}
+                  />
+                </>
+              ))}
+              <Grid
+                item
+                xs={12}
+                sm={14}
+                sx={{ textAlign: { sm: "center" }, mt: 5 }}
+              >
+                <Button onClick={handleSave}>sauvgarder</Button>
+              </Grid>
             </Grid>
-          </Grid>
           </>
-)}
-          {console.log(updatedData)}
-        </Container>
-        {isLoading ? <Loading />:null}
-        <Pop open={open} message={message} handleClose={handleClose} status={status}/>
+        )}
+        {console.log(updatedData)}
+      </Container>
+      {isLoading ? <Loading /> : null}
     </>
   );
 };

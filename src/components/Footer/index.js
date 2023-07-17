@@ -18,10 +18,16 @@ const Footer = () => {
       <Typography variant="body2" color="textSecondary" sx={{ marginBottom: isMobile ? '8px' : 0 }}>
         &copy; {new Date().getFullYear()} NCS Net Computer Service . Tous droits réservés.
       </Typography>
-      <Typography variant="body2" color="textSecondary" sx={{ marginLeft: isMobile ? 0 : '16px' }}>
+      <Typography variant="body2" color="textSecondary" sx={{ marginLeft: isMobile ? 0 : '8px' }}>
         Contact :{' '}
         <Link href="mailto:eserfaty@ncsfrance.com" color="inherit">
           eserfaty@ncsfrance.com
+        </Link>
+      </Typography>
+      <Typography variant="body2" color="textSecondary" sx={{ marginLeft: isMobile ? 0 : '8px' }}>
+        Developper par : {' '}
+        <Link href="mailto:davidserfaty2315@gmail.com" color="inherit">
+          DavidDev
         </Link>
       </Typography>
     </Box>

@@ -1,6 +1,7 @@
 //mui
 import { Container } from "@mui/material";
 //project import
+import CustomSnackbar from "../components/CustomSnackbar/index"
 import Navbar from "./NavBar";
 import Footer from '../components/Footer'
 import { Outlet } from "react-router-dom";
@@ -18,6 +19,7 @@ return (
           backgroundColor: "grey",
         }}
       >
+        <CustomSnackbar/>
         <Container
           maxWidth="lg"
           sx={{
@@ -33,8 +35,9 @@ return (
             flexDirection: "column",
           }}
         >
-         <Outlet/>
           
+         <Outlet/>
+
         </Container>
       </Container>
       <Footer/>
