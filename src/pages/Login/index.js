@@ -14,15 +14,15 @@ import './login.css'
 import Loading from '../../components/Loading'
 import logo from '../../assets/Design sans titre.png'
 import api from "../../utils/Axios"
-import bcrypt from "bcryptjs"
 //import context
 import { LoadingContext } from '../../context/loadingContext';
 import { AuthContext } from '../../context/authContext';
-
+import { SnackbarContext } from '../../context/snackbarContext'
+import CustomSnackbar from '../../components/CustomSnackbar';
 
 
 function Login() {
-  
+  const { showSnackbar } = useContext(SnackbarContext)
   const {showLoading , hideLoading} = useContext(LoadingContext)
   const {login} = useContext(AuthContext)
   const [identifiant, setIdentifiant] = useState('');
@@ -30,20 +30,23 @@ function Login() {
 
   const verif = async () => {
     showLoading()
-    const hashedPassword = await bcrypt.hash(password,10)
     try {
       const reponse = await api.post('/auth',{
         identifiant:identifiant,
-        password:hashedPassword
+        password:password
         })
+        setIdentifiant("")
+        setPassword("")
         hideLoading()
         login()
+        showSnackbar(reponse.data.message,"success")
       console.log(reponse.data);
     } catch (error) {
       hideLoading()
       setIdentifiant("")
       setPassword("")
-      console.log("erreur de connexion",error.response.data.msg);
+      showSnackbar(error.response.data.message,"error")
+      console.log("erreur de connexion");
     }
   };
 
@@ -66,9 +69,9 @@ function Login() {
       
               <p className="text-grey-50 mb-3">Please enter your login and password!</p>
 
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Identifiant' id='formControlLg' type='email' size="md" value={identifiant}
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Identifiant'  type='email' size="md" value={identifiant}
   onChange={(e) => setIdentifiant(e.target.value)}/>
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Password' id='formControlLg' type='password' size="md" value={password}
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Password'  type='password' size="md" value={password}
   onChange={(e) => setPassword(e.target.value)}/>
 
               <p className="small mb-3 pb-lg-2"><a class="text-grey-50" href="#!">Forgot password?</a></p>
@@ -100,8 +103,9 @@ function Login() {
         </MDBCol>
       </MDBRow>
 
-    </MDBContainer>µ
+    </MDBContainer>
     <Loading/>
+    <CustomSnackbar/>
     </>
   );
 }

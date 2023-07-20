@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -9,7 +9,12 @@ import NewFournisseur from "./components/NewFournisseur";
 import { AuthContext } from "./context/authContext";
 
 const App = () => {
+  
   const { isAuthenticated, login, logout } = useContext(AuthContext);
+
+useEffect(()=>{
+
+},[])
 
   return (
     <Routes>
@@ -17,9 +22,8 @@ const App = () => {
             <Route index element={<Fournisseurs />} />
             <Route path="rechercher" element={<Produits />} />
             <Route path="newFournisseur" element={<NewFournisseur />} />
-            
           </Route>
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={isAuthenticated?<Navigate to="/"/>:<Login />} />
           <Route path="register" element={<Register />} />
     </Routes>
   );
