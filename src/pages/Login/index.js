@@ -1,51 +1,110 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, Typography, TextField, Button } from '@mui/material';
-import { GoogleLoginButton } from 'react-social-login-buttons';
+import React ,{useContext, useState}from 'react';
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+  MDBIcon
+}
+from 'mdb-react-ui-kit';
+import './login.css'
+import Loading from '../../components/Loading'
+import logo from '../../assets/Design sans titre.png'
+import api from "../../utils/Axios"
+import bcrypt from "bcryptjs"
+//import context
+import { LoadingContext } from '../../context/loadingContext';
+import { AuthContext } from '../../context/authContext';
 
 
-const LoginPage = () => {
+
+function Login() {
+  
+  const {showLoading , hideLoading} = useContext(LoadingContext)
+  const {login} = useContext(AuthContext)
+  const [identifiant, setIdentifiant] = useState('');
+  const [password, setPassword] = useState('');
+
+  const verif = async () => {
+    showLoading()
+    const hashedPassword = await bcrypt.hash(password,10)
+    try {
+      const reponse = await api.post('/auth',{
+        identifiant:identifiant,
+        password:hashedPassword
+        })
+        hideLoading()
+        login()
+      console.log(reponse.data);
+    } catch (error) {
+      hideLoading()
+      setIdentifiant("")
+      setPassword("")
+      console.log("erreur de connexion",error.response.data.msg);
+    }
+  };
+
+
   return (
-    <div
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f8f8f8',
-      }}
-    >
-      <Card
-        sx={{
-          width: '400px',
-          display: 'flex',
-          flexDirection: 'row',
-          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <CardContent sx={{ flex: 1 }}>
-          <img src="../../assets/YOSI9794.jpg" alt="Company Logo" sx={{ height: '80px', marginBottom: '20px' }} />
-          <Typography variant="h5" sx={{ marginBottom: '20px' }}>
-            Connectez-vous à votre compte
-          </Typography>
-          <TextField label="Adresse e-mail" fullWidth sx={{ marginBottom: '20px' }} />
-          <TextField label="Mot de passe" type="password" fullWidth sx={{ marginBottom: '20px' }} />
-          <Button variant="contained" fullWidth sx={{ marginBottom: '20px' }}>
-            Se connecter
-          </Button>
-          <Typography variant="body2" sx={{ textAlign: 'center', color: 'grey' }}>
-            Si vous n'avez pas de compte,{' '}
-            <Link to="/register" sx={{ color: 'blue', textDecoration: 'none' }}>
-              inscrivez-vous
-            </Link>
-          </Typography>
-          <GoogleLoginButton fullWidth sx={{ marginTop: '20px' }} />
-        </CardContent>
-        <img src="../../assets/ncs-logo-final2.png" alt="Company Photo" sx={{ flex: 1, objectFit: 'cover' }} />
-      </Card>
-    </div>
-  );
-};
+    <>
+    <MDBContainer fluid>
 
-export default LoginPage;
+      <MDBRow className='d-flex justify-content-center align-items-center h-100'>
+        <MDBCol col='12' className='arriere'>
+
+          <MDBCard className='text-grey my-5 mx-auto mt-4' style={{borderRadius: '3rem', maxWidth: '400px' ,background:'#f5f5f5'}}>
+            <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100 ' >
+            <div className="text-center">
+              <img src={logo}
+              width={"50px"}
+                 alt="logo" />
+              <h5 className="fw-bold mt-1 mb-2 pb-1 ">Login</h5>
+            </div>
+      
+              <p className="text-grey-50 mb-3">Please enter your login and password!</p>
+
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Identifiant' id='formControlLg' type='email' size="md" value={identifiant}
+  onChange={(e) => setIdentifiant(e.target.value)}/>
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Password' id='formControlLg' type='password' size="md" value={password}
+  onChange={(e) => setPassword(e.target.value)}/>
+
+              <p className="small mb-3 pb-lg-2"><a class="text-grey-50" href="#!">Forgot password?</a></p>
+              <MDBBtn outline className='mx-2 px-5 arriere log' color='white' size='md' onClick={verif}>
+                Login
+              </MDBBtn>
+
+              <div className='d-flex flex-row '>
+                <MDBBtn tag='a' color='none' className='m-3' style={{ color: '#1877F2' }}>
+                  <MDBIcon fab icon='facebook-f' size="md"/>
+                </MDBBtn>
+
+                <MDBBtn tag='a' color='none' className='m-3' style={{ color: '#1DA1F2' }}>
+                  <MDBIcon fab icon='twitter' size="md"/>
+                </MDBBtn>
+
+                <MDBBtn tag='a' color='none' className='m-3' style={{ color: 'red' }}>
+                  <MDBIcon fab icon='google' size="md"/>
+                </MDBBtn>
+              </div>
+
+              <div>
+                <p className="mb-0">Don't have an account? <a href="/register" class="text-grey-50 fw-bold">Sign Up</a></p>
+
+              </div>
+            </MDBCardBody>
+          </MDBCard>
+
+        </MDBCol>
+      </MDBRow>
+
+    </MDBContainer>µ
+    <Loading/>
+    </>
+  );
+}
+
+export default Login;
 

@@ -61,7 +61,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
+    <AppBar position="sticky" sx={{ backgroundColor: '#FFFFFF', color: 'hsl(217, 10%, 50.8%)' ,borderRadius:"10px" }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
           <IconButton edge="start" sx={{ marginRight: 2 }} color="inherit" aria-label="menu" onClick={handleClick}>

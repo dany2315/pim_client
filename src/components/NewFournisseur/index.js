@@ -10,8 +10,9 @@ import {
   Container,
   Box,
 } from "@mui/material";
+//import context
+import { LoadingContext } from "../../context/loadingContext";
 import {SnackbarContext} from "../../context/snackbarContext";
-import Loading from "../Loading";
 import NameChamp from "./NameChamp";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +27,7 @@ const NewFournisseur = () => {
   //data avec modif des champs
   const [updatedData, setUpdatedData] = useState([]);
   const [nameCollect, setNameCollect] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const { showLoading , hideLoading } = useContext(LoadingContext);
   const { showSnackbar } = useContext(SnackbarContext);
 
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const NewFournisseur = () => {
   //fonction qui fais les changement des keyName avec le modifiedNames
   const handleSave = async () => {
     try {
-      setIsLoading(true);
+      showLoading()
       const resultName = handleS(nameCollect);
 
       console.log("azerty", resultName);
@@ -103,7 +104,7 @@ const NewFournisseur = () => {
             data: updateDatascop,
           })
           .catch((error) => {
-            setIsLoading(false);
+            hideLoading()
             showSnackbar("Fournisseur non sauvegarder !!","error")
             throw new Error(
               "Erreur lors de la sauvegarde des données dans newFourn: " + error
@@ -115,7 +116,7 @@ const NewFournisseur = () => {
             fieldNames: upKeyNames,
           })
           .catch((error) => {
-            setIsLoading(false);
+            hideLoading()
             showSnackbar("Fournisseur non sauvegarder dans la liste !!","error")
             throw new Error(
               "Erreur lors de la sauvegarde des données dans listFourn: " +
@@ -123,7 +124,7 @@ const NewFournisseur = () => {
             );
           }),
       ]);
-      setIsLoading(false);
+      hideLoading()
       showSnackbar("Nouveau fournisseur enregistrer !","success")
       console.log("Données sauvegardées avec succès !");
       navigate(-1);
@@ -334,7 +335,6 @@ const NewFournisseur = () => {
         )}
         {console.log(updatedData)}
       </Container>
-      {isLoading ? <Loading /> : null}
     </>
   );
 };

@@ -2,70 +2,70 @@ import React from 'react';
 import {
   MDBBtn,
   MDBContainer,
+  MDBRow,
+  MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBCol,
-  MDBRow,
-  MDBInput,
-  MDBCheckbox,
-  MDBIcon
+  MDBInput
 }
 from 'mdb-react-ui-kit';
-import "./register.css"
+import logo from '../../assets/Design sans titre.png'
+import './register.css'
+
 function Register() {
   return (
-    <MDBContainer fluid>
 
-      <div className="p-5 bg-image" style={{backgroundImage: 'url(https://mdbootstrap.com/img/new/textures/full/171.jpg)', height: '300px'}}></div>
+    <MDBContainer  fluid className='p-4 arriere '>
 
-      <MDBCard className='mx-5 mb-5 p-5 shadow-5' style={{marginTop: '-100px', background: 'hsla(0, 0%, 100%, 0.8)', backdropFilter: 'blur(30px)'}}>
-        <MDBCardBody className='p-5 text-center'>
+      <MDBRow>
 
-          <h2 className="fw-bold mb-5">Sign up now</h2>
+        <MDBCol md='6' className='text-center text-md-start d-flex flex-column justify-content-center'>
 
-          <MDBRow>
-            <MDBCol col='6'>
-              <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text'/>
-            </MDBCol>
+          <h1 className="my-5 display-3 fw-bold ls-tight px-3">
+            Net computer services<br />
+            <span className="text-primary">A vos service informatique </span>
+          </h1>
 
-            <MDBCol col='6'>
-              <MDBInput wrapperClass='mb-4' label='Last name' id='form1' type='text'/>
-            </MDBCol>
-          </MDBRow>
+         
 
-          <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email'/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password'/>
+        </MDBCol>
 
-          <div className='d-flex justify-content-center mb-4'>
-            <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
-          </div>
+        <MDBCol md='6'>
 
-          <MDBBtn className='w-100 mb-4' size='md'>sign up</MDBBtn>
+          <MDBCard className='my-5'>
+            <MDBCardBody className='p-4'>
+<div className="text-center mb-3">
+              <img src={logo}
+              width={"65px"}
+                 alt="logo" />
+            </div>
+              <MDBRow>
+              
+                <MDBCol col='6 '>
+                  <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text'/>
+                </MDBCol>
 
-          <div className="text-center">
+                <MDBCol col='6'>
+                  <MDBInput wrapperClass='mb-4' label='Last name' id='form1' type='text'/>
+                </MDBCol>
+              </MDBRow>
 
-            <p>or sign up with:</p>
+              <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email'/>
+              <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password'/>
 
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='facebook-f' size="sm"/>
-            </MDBBtn>
 
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='twitter' size="sm"/>
-            </MDBBtn>
+              <MDBBtn className='w-100 mb-4 arrier' size='md' >sign up</MDBBtn>
 
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='google' size="sm"/>
-            </MDBBtn>
+              
 
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='github' size="sm"/>
-            </MDBBtn>
+            </MDBCardBody>
+          </MDBCard>
+ <p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
+           Toujours la à votre services besoin de conseil technique ou reseau contacter nous au:<a href="mailto:davidserfaty2315@gmail.com" class="text-grey-50 fw-bold" target='_blank'> davidserfaty2315@gmail.com</a>
+          </p>
+        </MDBCol>
 
-          </div>
-
-        </MDBCardBody>
-      </MDBCard>
+      </MDBRow>
 
     </MDBContainer>
   );

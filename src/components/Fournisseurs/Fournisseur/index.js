@@ -1,3 +1,4 @@
+import { useState, useEffect , useContext } from "react";
 import { Grid, Typography, Box, Button  } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -6,16 +7,18 @@ import IconButton from "@mui/material/IconButton";
 import Loading from '../../Loading';
 import api from "../../../utils/Axios";
 import Papa from "papaparse";
-import { useState, useEffect , useContext } from "react";
+//import context
 import {SnackbarContext} from "../../../context/snackbarContext"
+import { LoadingContext } from "../../../context/loadingContext";
 
 const Fournisseur = ({ collectionName, fieldNames }) => {
 
-  const [isLoading, setIsLoading] = useState(false);
+  
   const [keyNames, setKeyNames] = useState([]);
   const [plein, setPlein] = useState(false);
   const collect = collectionName;
   const { showSnackbar } = useContext(SnackbarContext);
+  const { showLoading , hideLoading } = useContext(LoadingContext)
   
  useEffect(() => {
     GetRempli();
@@ -35,7 +38,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const handleReSave = async (event) => {
     const updatedData = await handleFile(event);
-    setIsLoading(true)
+    showLoading()
     console.log("liste key names ", keyNames);
     console.log("liste fieldNames : ", fieldNames);
     console.log("data : ", updatedData);
@@ -64,11 +67,11 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         collectionName: collectionName,
       });
     console.log("succes resauvgarde ",response.data);
-      setIsLoading(false)
+      hideLoading()
       showSnackbar("Mise a niveau effectuer !","success")
       setPlein(true)
     } catch (error) {
-      setIsLoading(false)
+      hideLoading()
       showSnackbar("Mise a niveau echouer !","error")
       setPlein(true)
       console.error("Erreur lors de la resauvegarde des données :", error);
@@ -134,16 +137,16 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const handleDelete = async() =>{
     try {
-      setIsLoading(true)
+      showLoading()
       const response = await api.post("/fournisseur/deleteId", {
         collectionName: collect,
       });
       console.log("reponse a la suppresssion : ",response.data);
       setPlein(false)
-      setIsLoading(false)
+      hideLoading()
       showSnackbar("Suppression effectuer !","success")
     } catch (error) {
-      setIsLoading(false)
+      hideLoading()
       showSnackbar("Suppression echouer !","error")
       console.error(`Erreur lors de la supprime du contenu de ${collect} :`, error);
     }
@@ -234,7 +237,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
           }
         </Grid>
       </Grid>
-      {isLoading ? <Loading />:null}
+      
      
     </>
   );

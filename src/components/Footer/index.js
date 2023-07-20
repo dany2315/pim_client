@@ -6,10 +6,14 @@ const Footer = () => {
   return (
     <Box
       sx={{
+        borderRadius:"10px",
         backgroundColor: '#f5f5f5',
         padding: '16px',
         textAlign: 'center',
         marginTop: '24px',
+        marginRight:"10px",
+        marginLeft:"10px",
+
         flexDirection: isMobile ? 'column' : 'row',
         alignItems: 'center',
         justifyContent: 'center',

@@ -36,7 +36,7 @@ function Fournisseurs() {
   return (
     
       
-        <Container maxWidth="md">
+        <Container maxWidth="md"  >
           <Typography variant="h5" color={"#82CEF9"} fontFamily={"cursive"}>Liste des Fournisseurs</Typography>
 
 
