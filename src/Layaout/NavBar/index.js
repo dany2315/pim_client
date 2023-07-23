@@ -14,11 +14,11 @@ const loginButtonStyle = {
 };
 
 const registerButtonStyle = {
-  backgroundColor: '#66CCFF',
+  backgroundColor: '#82aff9',
   color: '#FFFFFF',
   fontSize: '0.8rem',
   '&:hover': {
-    backgroundColor: '#0088CC',
+    backgroundColor: '#8eb8fb',
   },
 };
 
@@ -30,13 +30,13 @@ const menuLinkStyles = {
   fontWeight: 'bold',
   transition: 'background-color 0.3s ease',
   '&:hover': {
-    backgroundColor: '#EBF2FA',
+    backgroundColor: '#8eb8fb',
   },
 };
 
 const activeMenuLinkStyles = {
   fontWeight: 'bold',
-  backgroundColor: '#82CEF9',
+  backgroundColor: '#8eb8fb',
   color:'white',
 };
 

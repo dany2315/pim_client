@@ -166,9 +166,9 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
           padding: "16px",
           borderRadius: "8px",
           transition: "box-shadow 0.3s ease",
-          boxShadow: "2px 2px 6px rgba(130, 206, 249, 1.5);",
+          boxShadow: "2px 2px 6px rgba(142, 184, 251, 1.5);",
           "&:hover": {
-          boxShadow: "4px 4px 8px rgba(130, 206, 249, 2)",
+          boxShadow: "4px 4px 8px rgba(116, 168, 251, 2)",
           
         },
       }}

@@ -37,7 +37,7 @@ function Fournisseurs() {
     
       
         <Container maxWidth="md"  >
-          <Typography variant="h5" color={"#82CEF9"} fontFamily={"cursive"}>Liste des Fournisseurs</Typography>
+          <Typography variant="h5" color={"#8eb8fb"} fontFamily={"cursive"}>Liste des Fournisseurs</Typography>
 
 
           <Box sx={{ textAlign: "right" }}>
@@ -50,8 +50,11 @@ function Fournisseurs() {
                     sx={{
                       fontSize:23,
                       borderRadius: "20px",
-                      backgroundColor: "#82CEF9",
+                      backgroundColor: "#8eb8fb",
                       color: "white",
+                      '&:hover': {
+                        backgroundColor: '#8eb8fb',
+                      },
                     }}
                   >
                     <div>+</div>
