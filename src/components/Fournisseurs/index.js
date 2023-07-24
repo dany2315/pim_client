@@ -19,7 +19,9 @@ function Fournisseurs() {
   useEffect(() => {
     const fetchFournisseur = async () => {
       try {
-        const response = await api.get("/fournisseur");
+        const response = await api.get("/fournisseur",{
+          
+        });
         console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
       } catch (error) {

@@ -16,12 +16,13 @@ import { SnackbarContext } from "../../../context/snackbarContext";
 import NameChamp from "../NameChamp";
 import { useNavigate } from "react-router-dom";
 
-const NewFournisseurFtp = () => {
+const  NewFournisseurFtp = ({ numId }) => {
 
 const [urlFtp,setUrlFtp] = useState("")
 const [nomUtilis,setNomUtilis] = useState("")
 const [pass,setPass] = useState("")
 const [nameFile,setNameFile] = useState("")
+
 
   const [fileNew, setFileNew] = useState([]);
   const [dataNew, setDataNew] = useState([]);
@@ -129,13 +130,18 @@ try {
             hideLoading();
             showSnackbar("Fournisseur non sauvegarder !!", "error");
             throw new Error(
-              "Erreur lors de la sauvegarde des données dans newFourn: " + error
+              "Erreur lors de la sauvegarde des données dans son Fournisseur: " + error
             );
           }),
         api
-          .post("/fournisseur/newFourn", {
+          .post("/fournisseur/ftp", {
             collectionName: resultName,
             fieldNames: upKeyNames,
+            categorie: numId,
+            urlFtp:urlFtp,
+            nomUtilis:nomUtilis,
+            pass:pass,
+            nameFile:nameFile
           })
           .catch((error) => {
             hideLoading();

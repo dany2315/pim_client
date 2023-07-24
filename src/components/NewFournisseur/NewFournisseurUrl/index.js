@@ -17,6 +17,9 @@ import NameChamp from "../NameChamp";
 import { useNavigate } from "react-router-dom";
 
 const NewFournisseurUrl = () => {
+
+  const [url,setUrl] = useState("")
+
   const [fileNew, setFileNew] = useState([]);
   const [dataNew, setDataNew] = useState([]);
   const [keyNamesNew, setKeyNamesNew] = useState([]);
@@ -32,6 +35,9 @@ const NewFournisseurUrl = () => {
 
   const navigate = useNavigate();
 
+  const handleUrl = () =>{
+    
+  }
 
   const handleChange = (e) => {
     const nameFourn = e.target.value;
@@ -198,28 +204,41 @@ const NewFournisseurUrl = () => {
       <Container maxWidth="md">
         {keyNamesNew.length === 0 ? (
           <Box sx={{ textAlign: "center" }}>
-            <div>
-              <label htmlFor="file-upload">
-                <input
-                  id="file-upload"
-                  type="file"
-                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                  style={{ display: "none" }}
-                  onChange={handleFileUpload}
-                />
-                <Button
-                  variant="contained"
-                  component="span"
-                  sx={{
-                    borderRadius: "20px",
-                    backgroundColor: "#82CEF9",
-                    color: "white",
-                  }}
-                >
-                  <div>Choose File</div>
-                </Button>
-              </label>
-            </div>
+            <TextField
+              label="URL"
+              variant="standard"
+              size="small"
+              placeholder="http//example.com"
+              value={url}
+              onChange={(e)=>setUrl(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+              sx={{
+                color: "#8eb8fb !important", // Changer la couleur du texte ici
+                "& .MuiInputLabel-root": {
+                  color: "#8eb8fb !important", // Changer la couleur du label ici
+                },
+                "& .MuiInputBase-input": {
+                  color: "#8eb8fb !important", // Changer la couleur de l'input ici
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
+                },
+                "& .Mui-focused": {
+                  color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                  "& .MuiInputLabel-root": {
+                    color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                  },
+                },
+              }}
+            />
+             <Grid
+                item
+                xs={12}
+                sm={14}
+                sx={{ textAlign: { sm: "center" }, mt: 5 }}
+              >
+                <Button onClick={handleUrl}>sauvgarder</Button>
+              </Grid>
           </Box>
         ) : (
           <>

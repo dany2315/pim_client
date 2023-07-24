@@ -16,7 +16,7 @@ import {SnackbarContext} from "../../../context/snackbarContext";
 import NameChamp from "../NameChamp";
 import { useNavigate } from "react-router-dom";
 
-const NewFournisseurFile = () => {
+const NewFournisseurFile = ({numId}) => {
   const [fileNew, setFileNew] = useState([]);
   const [dataNew, setDataNew] = useState([]);
   const [keyNamesNew, setKeyNamesNew] = useState([]);
@@ -111,9 +111,10 @@ const NewFournisseurFile = () => {
             );
           }),
         api
-          .post("/fournisseur/newFourn", {
+          .post("/fournisseur/file", {
             collectionName: resultName,
             fieldNames: upKeyNames,
+            categorie:numId,
           })
           .catch((error) => {
             hideLoading()
