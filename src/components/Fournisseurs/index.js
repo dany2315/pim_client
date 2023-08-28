@@ -1,91 +1,60 @@
-import React, { useState, useEffect} from "react";
-import {
-  Typography,
-  Container,
-  Box,
-  Button,
-  Grid,
-} from "@mui/material";
-
-import Fournisseur from "./Fournisseur";
+import React, { useState, useEffect } from "react";
+import { Typography, Container, Box, Button, Grid } from "@mui/material";
+import Fournisseur from "./Bloc";
 import { NavLink } from "react-router-dom";
 import api from "../../utils/Axios";
+import Bloc from "./Bloc";
 
 function Fournisseurs() {
-
-  const [fournisseurs, setfournisseurs] = useState([]);
-
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchFournisseur = async () => {
+    const fetchCategories = async () => {
       try {
-        const response = await api.get("/fournisseur",{
-          
-        });
-        console.log("listFourn ajout", response.data);
-        setfournisseurs(response.data);
+        const response = await api.get("/fournisseur/categories");
+        setCategories(response.data);
+        console.log(response.data);
       } catch (error) {
-        console.log("erreur lors de la recuperations des fournisseurs", error);
+        console.log(error);
       }
     };
-
-    fetchFournisseur();
+    fetchCategories();
   }, []);
 
-
- 
-
   return (
-    
-      
-        <Container maxWidth="md"  >
-          <Typography variant="h5" color={"#8eb8fb"} fontFamily={"cursive"}>Liste des Fournisseurs</Typography>
+    <Container maxWidth="md">
 
+      <Box sx={{ textAlign: "right" }}>
+        <Button
+          variant="contained"
+          component={NavLink}
+          to="/newFournisseur"
+          sx={{
+            fontSize: 23,
+            borderRadius: "20px",
+            backgroundColor: "#8eb8fb",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#8eb8fb",
+            },
+          }}
+        >
+          <div>+</div>
+        </Button>
+      </Box>
 
-          <Box sx={{ textAlign: "right" }}>
-              
-                  <Button
-                   
-                    variant="contained"
-                    component={NavLink}
-                    to="/newFournisseur"
-                    sx={{
-                      fontSize:23,
-                      borderRadius: "20px",
-                      backgroundColor: "#8eb8fb",
-                      color: "white",
-                      '&:hover': {
-                        backgroundColor: '#8eb8fb',
-                      },
-                    }}
-                  >
-                    <div>+</div>
-                  </Button>
-            </Box>
-
-
-          <Grid
-            container
-            spacing={2}
-            direction="column"
-            sx={{ marginTop: "16px" }}
-          >
-            {fournisseurs.length === 0 ? (
-              <Typography variant="body1">
-                Aucun fournisseur a ete enregistrer.
-              </Typography>
-            ) : (
-              fournisseurs.map((fournisseur, index) => (
-                <Grid item xs={2} key={index}>
-                      <Fournisseur
-                        collectionName={fournisseur.collectionName}
-                        fieldNames={fournisseur.fieldNames}
-                      />
-                </Grid>
-              ))
-            )}
-          </Grid>
-        </Container>
-      )}
+      <Grid container spacing={3} direction="row" sx={{ marginTop: "16px" }}>
+        
+          {categories.map((categorie, index) => (
+            <Grid item xs={6} justifyContent="center"  direction="collumn" sx={{padding:0.5 ,}} key={index}>
+              <Bloc
+                categorie={categorie}
+              />
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
+  );
+}
 
 export default Fournisseurs;

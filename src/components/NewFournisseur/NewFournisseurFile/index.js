@@ -234,11 +234,11 @@ const NewFournisseurFile = ({numId}) => {
                 component="span"
                 sx={{
                   borderRadius: "20px",
-                  backgroundColor: "#82CEF9",
+                  backgroundColor: "#8eb8fb",
                   fontFamily: "cursive",
                   color: "white",
                   "&:hover": {
-                    color: "#82CEF9",
+                    color: "#8eb8fb",
                   },
                 }}
               >
@@ -283,20 +283,20 @@ const NewFournisseurFile = ({numId}) => {
                     variant="standard"
                     size="small"
                     sx={{
-                      color: "#82CEF9 !important", // Changer la couleur du texte ici
+                      color: "#8eb8fb !important", // Changer la couleur du texte ici
                       "& .MuiInputLabel-root": {
-                        color: "#82CEF9 !important", // Changer la couleur du label ici
+                        color: "#8eb8fb !important", // Changer la couleur du label ici
                       },
                       "& .MuiInputBase-input": {
-                        color: "#82CEF9 !important", // Changer la couleur de l'input ici
+                        color: "#8eb8fb !important", // Changer la couleur de l'input ici
                       },
                       "& .MuiInput-underline:after": {
                         borderBottomColor: "#82CEF9 !important", // Changer la couleur de la barre du bas
                       },
                       "& .Mui-focused": {
-                        color: "#82CEF9 !important", // Changer la couleur lorsque le champ est en focus
+                        color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
                         "& .MuiInputLabel-root": {
-                          color: "#82CEF9 !important", // Changer la couleur du label lorsque le champ est en focus
+                          color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
                         },
                       },
                     }}
@@ -306,7 +306,7 @@ const NewFournisseurFile = ({numId}) => {
                     sx={{
                       marginTop: "0 !important",
                       fontFamily: "cursive",
-                      color: "#82CEF9",
+                      color: "#8eb8fb",
                     }}
                   >
                     Mettre que des minuscules

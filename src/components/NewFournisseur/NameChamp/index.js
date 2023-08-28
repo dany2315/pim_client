@@ -24,7 +24,7 @@ const NameChamp = ({ keyName, index, onNameChange, modifiedNames }) => {
         }}
       >
         <Grid item xs={6} sm={6} sx={{ textAlign: "center", mt: 2 }}>
-          <Typography variant="h7" color={"#82CEF9"} fontFamily={"cursive"}>{keyName}</Typography>
+          <Typography variant="h7" color={"#8eb8fb"} fontFamily={"cursive"}>{keyName}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} sx={{ textAlign: "center" }}>
           <FormControl sx={{ minWidth: 120 }}>

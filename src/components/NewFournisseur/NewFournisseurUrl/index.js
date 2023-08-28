@@ -16,7 +16,7 @@ import {SnackbarContext} from "../../../context/snackbarContext";
 import NameChamp from "../NameChamp";
 import { useNavigate } from "react-router-dom";
 
-const NewFournisseurUrl = () => {
+const NewFournisseurUrl = ({numId}) => {
 
   const [url,setUrl] = useState("")
 
@@ -120,6 +120,7 @@ const NewFournisseurUrl = () => {
           .post("/fournisseur/newFourn", {
             collectionName: resultName,
             fieldNames: upKeyNames,
+            categorie:numId,
           })
           .catch((error) => {
             hideLoading()

@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import api from "../../../utils/Axios";
-import Papa from "papaparse";
 import {
   TextField,
   FormHelperText,
@@ -16,13 +15,11 @@ import { SnackbarContext } from "../../../context/snackbarContext";
 import NameChamp from "../NameChamp";
 import { useNavigate } from "react-router-dom";
 
-const  NewFournisseurFtp = ({ numId }) => {
-
-const [urlFtp,setUrlFtp] = useState("")
-const [nomUtilis,setNomUtilis] = useState("")
-const [pass,setPass] = useState("")
-const [nameFile,setNameFile] = useState("")
-
+const NewFournisseurFtp = ({ numId }) => {
+  const [urlFtp, setUrlFtp] = useState("");
+  const [nomUtilis, setNomUtilis] = useState("");
+  const [pass, setPass] = useState("");
+  const [nameFile, setNameFile] = useState("");
 
   const [fileNew, setFileNew] = useState([]);
   const [dataNew, setDataNew] = useState([]);
@@ -38,6 +35,25 @@ const [nameFile,setNameFile] = useState("")
   const { showSnackbar } = useContext(SnackbarContext);
 
   const navigate = useNavigate();
+
+  const handleFtp = async () => {
+    if (urlFtp && nomUtilis && pass && nameFile) {
+      try {
+        console.log("value : ", { pass, nomUtilis, urlFtp, nameFile });
+        const response = await api.post("/fournisseur/ftp", {
+          urlFtp: urlFtp,
+          nomUtilis: nomUtilis,
+          pass: pass,
+          nameFile: nameFile,
+        });
+        handleFileUpload(response.data);
+        console.log("reponse ftp", response.data);
+      } catch (error) {
+        console.log("error ftp", error);
+      }
+    } else {
+    }
+  };
 
   const handleChange = (e) => {
     const nameFourn = e.target.value;
@@ -67,23 +83,6 @@ const [nameFile,setNameFile] = useState("")
     });
     console.log("modifiedNames :", modifiedNames);
   };
-
-
-const handleFtp = async () =>{
-try {
-    const response = await api.post('',{
-        urlFtp:urlFtp,
-        nomUtilis:nomUtilis,
-        pass:pass,
-        nameFile:nameFile
-    })
-    console.log("reponse ftp",response.data);
-} catch (error) {
-    
-}
-    console.log("value : ", {pass, nomUtilis,urlFtp,nameFile});
-}
-
 
   //fonction qui fais les changement des keyName avec le modifiedNames
   const handleSaveFtp = async () => {
@@ -130,7 +129,8 @@ try {
             hideLoading();
             showSnackbar("Fournisseur non sauvegarder !!", "error");
             throw new Error(
-              "Erreur lors de la sauvegarde des données dans son Fournisseur: " + error
+              "Erreur lors de la sauvegarde des données dans son Fournisseur: " +
+                error
             );
           }),
         api
@@ -138,10 +138,10 @@ try {
             collectionName: resultName,
             fieldNames: upKeyNames,
             categorie: numId,
-            urlFtp:urlFtp,
-            nomUtilis:nomUtilis,
-            pass:pass,
-            nameFile:nameFile
+            urlFtp: urlFtp,
+            nomUtilis: nomUtilis,
+            pass: pass,
+            nameFile: nameFile,
           })
           .catch((error) => {
             hideLoading();
@@ -171,185 +171,164 @@ try {
   };
 
   //fonction pour upload le fichier csv grace a papaparse
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    setFileNew(file);
-    console.log(file);
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const content = e.target.result;
-      const decoder = new TextDecoder("iso-8859-1");
-      const fileContent = decoder.decode(content);
-
-      const stringWithoutAccents = fileContent
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-
-      Papa.parse(stringWithoutAccents, {
-        header: true,
-        encoding: "UTF-8",
-        skipEmptyLines: true,
-        worker: true,
-
-        complete: (results) => {
-          const dataNoFilter = results.data;
-          // Filtrer les objets où 'sku' est vide
-          let filteredData = [];
-          if (dataNoFilter) {
-            filteredData = dataNoFilter.filter((item) => {
-              for (let key in item) {
-                if (item.hasOwnProperty(key) && item[key] === "") {
-                  return false;
-                }
-              }
-              return true;
-            });
-            setDataNew(filteredData);
+  const handleFileUpload = (data) => {
+    setFileNew(nameFile);
+    const dataNoFilter = data;
+    // Filtrer les objets où 'sku' est vide
+    let filteredData = [];
+    if (dataNoFilter) {
+      filteredData = dataNoFilter.filter((item) => {
+        for (let key in item) {
+          if (item.hasOwnProperty(key) && item[key] === "") {
+            return false;
           }
-          //nom des proprieter
-          const propertyNames =
-            filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
-          setKeyNamesNew(propertyNames);
-
-          console.log("donne filtrer :", filteredData);
-          console.log("nom de key :", propertyNames);
-        },
-        error: (error) => {
-          console.error("Erreur lors de l'analyse du fichier CSV :", error);
-        },
+        }
+        return true;
       });
-    };
+      setDataNew(filteredData);
+    }
+    //nom des proprieter
+    const propertyNames =
+      filteredData.length > 0 ? Object.keys(filteredData[0]) : [];
+    setKeyNamesNew(propertyNames);
 
-    reader.readAsArrayBuffer(file);
+    console.log("donne filtrer :", filteredData);
+    console.log("nom de key :", propertyNames);
   };
 
   return (
     <>
       <Container maxWidth="md">
         {keyNamesNew.length === 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-             <Box sx={{ display: 'flex', gap: 10 }}>
-            <TextField
-              label="URL FTP"
-              variant="standard"
-              size="small"
-              placeholder="ftp.example.com"
-              value={urlFtp}
-              onChange={(e)=>setUrlFtp(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{
-                color: "#8eb8fb !important", // Changer la couleur du texte ici
-                "& .MuiInputLabel-root": {
-                  color: "#8eb8fb !important", // Changer la couleur du label ici
-                },
-                "& .MuiInputBase-input": {
-                  color: "#8eb8fb !important", // Changer la couleur de l'input ici
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
-                },
-                "& .Mui-focused": {
-                  color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ display: "flex", gap: 10 }}>
+              <TextField
+                label="URL FTP"
+                variant="standard"
+                size="small"
+                placeholder="ftp.example.com"
+                value={urlFtp}
+                onChange={(e) => setUrlFtp(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  color: "#8eb8fb !important", // Changer la couleur du texte ici
                   "& .MuiInputLabel-root": {
-                    color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                    color: "#8eb8fb !important", // Changer la couleur du label ici
                   },
-                },
-              }}
-            />
-            <TextField
-              label="Nom d'utilisateur"
-              variant="standard"
-              size="small"
-              placeholder="user234"
-              value={nomUtilis}
-              onChange={(e)=>setNomUtilis(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{
-                color: "#8eb8fb !important", // Changer la couleur du texte ici
-                "& .MuiInputLabel-root": {
-                  color: "#8eb8fb !important", // Changer la couleur du label ici
-                },
-                "& .MuiInputBase-input": {
-                  color: "#8eb8fb !important", // Changer la couleur de l'input ici
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
-                },
-                "& .Mui-focused": {
-                  color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                  "& .MuiInputBase-input": {
+                    color: "#8eb8fb !important", // Changer la couleur de l'input ici
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
+                  },
+                  "& .Mui-focused": {
+                    color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                    "& .MuiInputLabel-root": {
+                      color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                    },
+                  },
+                }}
+              />
+              <TextField
+                label="Nom d'utilisateur"
+                variant="standard"
+                size="small"
+                placeholder="user234"
+                value={nomUtilis}
+                onChange={(e) => setNomUtilis(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  color: "#8eb8fb !important", // Changer la couleur du texte ici
                   "& .MuiInputLabel-root": {
-                    color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                    color: "#8eb8fb !important", // Changer la couleur du label ici
                   },
-                },
-              }}
-            />
+                  "& .MuiInputBase-input": {
+                    color: "#8eb8fb !important", // Changer la couleur de l'input ici
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
+                  },
+                  "& .Mui-focused": {
+                    color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                    "& .MuiInputLabel-root": {
+                      color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                    },
+                  },
+                }}
+              />
             </Box>
-            <Box sx={{ display: 'flex', gap: 10 }}>
-            <TextField
-              label="Mot de passe"
-              type="password"
-              variant="standard"
-              size="small"
-              placeholder="******"
-              value={pass}
-              onChange={(e)=>setPass(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{
-                color: "#8eb8fb !important", // Changer la couleur du texte ici
-                "& .MuiInputLabel-root": {
-                  color: "#8eb8fb !important", // Changer la couleur du label ici
-                },
-                "& .MuiInputBase-input": {
-                  color: "#8eb8fb !important", // Changer la couleur de l'input ici
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
-                },
-                "& .Mui-focused": {
-                  color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+            <Box sx={{ display: "flex", gap: 10 }}>
+              <TextField
+                label="Mot de passe"
+                type="password"
+                variant="standard"
+                size="small"
+                placeholder="******"
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  color: "#8eb8fb !important", // Changer la couleur du texte ici
                   "& .MuiInputLabel-root": {
-                    color: " !important", // Changer la couleur du label lorsque le champ est en focus
+                    color: "#8eb8fb !important", // Changer la couleur du label ici
                   },
-                },
-              }}
-            />
-            <TextField
-              label="Nom du fichier"
-              variant="standard"
-              size="small"
-              placeholder="index"
-              value={nameFile}
-              onChange={(e)=>setNameFile(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{
-                color: "#8eb8fb !important", // Changer la couleur du texte ici
-                "& .MuiInputLabel-root": {
-                  color: "#8eb8fb !important", // Changer la couleur du label ici
-                },
-                "& .MuiInputBase-input": {
-                  color: "#8eb8fb !important", // Changer la couleur de l'input ici
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
-                },
-                "& .Mui-focused": {
-                  color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                  "& .MuiInputBase-input": {
+                    color: "#8eb8fb !important", // Changer la couleur de l'input ici
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
+                  },
+                  "& .Mui-focused": {
+                    color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                    "& .MuiInputLabel-root": {
+                      color: " !important", // Changer la couleur du label lorsque le champ est en focus
+                    },
+                  },
+                }}
+              />
+              <TextField
+                label="Nom du fichier"
+                variant="standard"
+                size="small"
+                placeholder="index"
+                value={nameFile}
+                onChange={(e) => setNameFile(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  color: "#8eb8fb !important", // Changer la couleur du texte ici
                   "& .MuiInputLabel-root": {
-                    color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                    color: "#8eb8fb !important", // Changer la couleur du label ici
                   },
-                },
-              }}
-            />
+                  "& .MuiInputBase-input": {
+                    color: "#8eb8fb !important", // Changer la couleur de l'input ici
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
+                  },
+                  "& .Mui-focused": {
+                    color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus
+                    "& .MuiInputLabel-root": {
+                      color: "#8eb8fb !important", // Changer la couleur du label lorsque le champ est en focus
+                    },
+                  },
+                }}
+              />
             </Box>
-           <Grid
-                item
-                xs={12}
-                sm={14}
-                sx={{ textAlign: { sm: "center" }, mt: 5 }}
-              >
-                <Button onClick={handleFtp}>sauvgarder</Button>
-              </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={14}
+              sx={{ textAlign: { sm: "center" }, mt: 5 }}
+            >
+              <Button onClick={handleFtp}>sauvgarder</Button>
+            </Grid>
           </Box>
         ) : (
           <>
@@ -359,15 +338,15 @@ try {
                 component="span"
                 sx={{
                   borderRadius: "20px",
-                  backgroundColor: "#82CEF9",
+                  backgroundColor: "#8eb8fb",
                   fontFamily: "cursive",
                   color: "white",
                   "&:hover": {
-                    color: "#82CEF9",
+                    color: "#8eb8fb",
                   },
                 }}
               >
-                {fileNew.name}
+                {fileNew}
               </Button>
             </Box>
 
@@ -380,7 +359,7 @@ try {
               >
                 <Typography
                   variant="h5"
-                  color={"#82CEF9"}
+                  color={"#8eb8fb"}
                   fontFamily={"cursive"}
                 >
                   Liste des champs du fichier CSV importer

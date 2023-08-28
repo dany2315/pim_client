@@ -4,14 +4,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
-import Loading from '../../Loading';
-import api from "../../../utils/Axios";
+import api from "../../../../utils/Axios";
 import Papa from "papaparse";
 //import context
-import {SnackbarContext} from "../../../context/snackbarContext"
-import { LoadingContext } from "../../../context/loadingContext";
+import {SnackbarContext} from "../../../../context/snackbarContext"
+import { LoadingContext } from "../../../../context/loadingContext";
 
-const Fournisseur = ({ collectionName, fieldNames }) => {
+const Fournisseur = ({ collectionName, fieldNames , categorie }) => {
 
   
   const [keyNames, setKeyNames] = useState([]);
@@ -62,7 +61,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     });
 
     try {
-      const response = await api.post("/fournisseur/resave", {
+      const response = await api.post("/fournisseur/file/resaveFile", {
         data: updateDatascop,
         collectionName: collectionName,
       });
@@ -138,7 +137,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
   const handleDelete = async() =>{
     try {
       showLoading()
-      const response = await api.post("/fournisseur/deleteId", {
+      const response = await api.post("/fournisseur/file/deleteIdFile", {
         collectionName: collect,
       });
       console.log("reponse a la suppresssion : ",response.data);
@@ -162,6 +161,8 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         
         p={1}
         sx={{
+          mt:1,
+          mb:1,
           backgroundColor: "white",
           padding: "16px",
           borderRadius: "8px",
