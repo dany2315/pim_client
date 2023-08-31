@@ -255,7 +255,7 @@ const NewFournisseurFile = ({numId}) => {
               >
                 <Typography
                   variant="h5"
-                  color={"#82CEF9"}
+                  color={"#8eb8fb"}
                   fontFamily={"cursive"}
                 >
                   Liste des champs du fichier CSV importer
@@ -291,7 +291,7 @@ const NewFournisseurFile = ({numId}) => {
                         color: "#8eb8fb !important", // Changer la couleur de l'input ici
                       },
                       "& .MuiInput-underline:after": {
-                        borderBottomColor: "#82CEF9 !important", // Changer la couleur de la barre du bas
+                        borderBottomColor: "#8eb8fb !important", // Changer la couleur de la barre du bas
                       },
                       "& .Mui-focused": {
                         color: "#8eb8fb !important", // Changer la couleur lorsque le champ est en focus

@@ -36,9 +36,10 @@ const NewFournisseurFtp = ({ numId }) => {
 
   const navigate = useNavigate();
 
-  const handleFtp = async () => {
+  const importFtp = async () => {
     if (urlFtp && nomUtilis && pass && nameFile) {
       try {
+        showLoading()
         console.log("value : ", { pass, nomUtilis, urlFtp, nameFile });
         const response = await api.post("/fournisseur/ftp", {
           urlFtp: urlFtp,
@@ -46,10 +47,14 @@ const NewFournisseurFtp = ({ numId }) => {
           pass: pass,
           nameFile: nameFile,
         });
-        handleFileUpload(response.data);
+        hideLoading()
+        showSnackbar("Importation par FTP reussi ","success")
+        handleFile(response.data);
         console.log("reponse ftp", response.data);
       } catch (error) {
         console.log("error ftp", error);
+        hideLoading()
+        showSnackbar("Importation par FTP echouer !!", "error")
       }
     } else {
     }
@@ -89,7 +94,6 @@ const NewFournisseurFtp = ({ numId }) => {
     try {
       showLoading();
       const resultName = handleS(nameCollect);
-
       console.log("azerty", resultName);
 
       const upKeyNames = keyNamesNew.map((keyName, index) => {
@@ -134,7 +138,7 @@ const NewFournisseurFtp = ({ numId }) => {
             );
           }),
         api
-          .post("/fournisseur/ftp", {
+          .post("/fournisseur/ftp/newFourn", {
             collectionName: resultName,
             fieldNames: upKeyNames,
             categorie: numId,
@@ -170,8 +174,8 @@ const NewFournisseurFtp = ({ numId }) => {
     console.log("Data mis à jour :", updatedData);
   };
 
-  //fonction pour upload le fichier csv grace a papaparse
-  const handleFileUpload = (data) => {
+  //fonction pour afficher les champs et enlever les champs vide
+  const handleFile = (data) => {
     setFileNew(nameFile);
     const dataNoFilter = data;
     // Filtrer les objets où 'sku' est vide
@@ -327,7 +331,7 @@ const NewFournisseurFtp = ({ numId }) => {
               sm={14}
               sx={{ textAlign: { sm: "center" }, mt: 5 }}
             >
-              <Button onClick={handleFtp}>sauvgarder</Button>
+              <Button onClick={importFtp}>sauvgarder</Button>
             </Grid>
           </Box>
         ) : (
@@ -437,7 +441,7 @@ const NewFournisseurFtp = ({ numId }) => {
                 sm={14}
                 sx={{ textAlign: { sm: "center" }, mt: 5 }}
               >
-                <Button onClick={handleSaveFtp}>sauvgarder</Button>
+                <Button onClick={()=>nameCollect ? handleSaveFtp() : showSnackbar("OUUUPS n'oublier pas le nom", "error")}>sauvgarder</Button>
               </Grid>
             </Grid>
           </>
