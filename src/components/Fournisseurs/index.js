@@ -13,7 +13,6 @@ function Fournisseurs() {
       try {
         const response = await api.get("/fournisseur/categories");
         setCategories(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }

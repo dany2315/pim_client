@@ -10,12 +10,12 @@ import Papa from "papaparse";
 import {SnackbarContext} from "../../../../context/snackbarContext"
 import { LoadingContext } from "../../../../context/loadingContext";
 
-const Fournisseur = ({ collectionName, fieldNames , categorie }) => {
+const Fournisseur = ({ fournisseur }) => {
 
   
   const [keyNames, setKeyNames] = useState([]);
   const [plein, setPlein] = useState(false);
-  const collect = collectionName;
+  const collect = fournisseur.collectionName;
   const { showSnackbar } = useContext(SnackbarContext);
   const { showLoading , hideLoading } = useContext(LoadingContext)
   
@@ -39,19 +39,19 @@ const Fournisseur = ({ collectionName, fieldNames , categorie }) => {
     const updatedData = await handleFile(event);
     showLoading()
     console.log("liste key names ", keyNames);
-    console.log("liste fieldNames : ", fieldNames);
+    console.log("liste fieldNames : ", fournisseur.fieldNames);
     console.log("data : ", updatedData);
     //Sortir le data final en enlevant les champs et les valeur des
     //articles indispenssable et garder que les autre
     const updateDatascop = updatedData.map((item) => {
       const updatedItem = {};
       Object.keys(item).forEach((key, index) => {
-        const updatedKey = fieldNames[index];
+        const updatedKey = fournisseur.fieldNames[index];
         if (updatedKey) {
           updatedItem[updatedKey] = item[key];
         }
       });
-      fieldNames.forEach((updatedKey, index) => {
+      fournisseur.fieldNames.forEach((updatedKey, index) => {
         if (updatedKey === "non_necessaire") {
           delete updatedItem[index]; // Supprimer la clé
           delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
@@ -63,7 +63,7 @@ const Fournisseur = ({ collectionName, fieldNames , categorie }) => {
     try {
       const response = await api.post("/fournisseur/file/resaveFile", {
         data: updateDatascop,
-        collectionName: collectionName,
+        collectionName: fournisseur.collectionName,
       });
     console.log("succes resauvgarde ",response.data);
       hideLoading()
@@ -176,7 +176,7 @@ const Fournisseur = ({ collectionName, fieldNames , categorie }) => {
       >
 
         <Grid item xs={4}>
-          <Typography variant="h7" fontFamily={"cursive"}>{collectionName}</Typography>
+          <Typography variant="h7" fontFamily={"cursive"}>{fournisseur.collectionName}</Typography>
         </Grid>
 
         <Grid item xs={4} sx={{ borderLeft: "solid 1px", textAlign: "center" }}>

@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
 import api from "../../../utils/Axios";
 import { Grid, Typography } from "@mui/material";
+import Button from '@mui/material/Button';
+
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Fournisseur from "./Fournisseur";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faServer } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faServer } from "@fortawesome/free-solid-svg-icons";
+import FournisseurFtp from "./FournisseurFtp";
 
 const Bloc = (props) => {
-  const categorie = props.categorie
+  const categorie = props.categorie;
   const [fournisseurs, setfournisseurs] = useState([]);
 
   useEffect(() => {
     const fetchFournisseur = async () => {
-      
       try {
         const response = await api.post("/fournisseur", {
-          id:categorie._id
+          id: categorie._id,
         });
         console.log("listFourn ajout", response.data);
         setfournisseurs(response.data);
@@ -27,34 +30,67 @@ const Bloc = (props) => {
   }, []);
 
   return (
-    <> 
-    <Typography variant="h5" color={"#8eb8fb"} fontFamily={"cursive"}>
-        <FontAwesomeIcon icon={faServer} style={{color: "#8eb8fb",}} /> {categorie.name}
-      </Typography>
-      {console.log("cat",categorie)}
-      <Grid overflow={"auto"} sx={{border:1,padding:2,borderRadius:3,borderColor:"#8eb8fb",height:"205px"}}>
-          
-      {fournisseurs.length === 0 ? (
-        <Typography variant="body1">
-          Aucun fournisseur a ete enregistrer.
-        </Typography>
-      ) : (
-        <>
-       
-         
-        
-            {fournisseurs.map((fournisseur, index) => (
+    <>
+<Grid
+container
+        direction="row"
+       >
 
-              <Fournisseur
-                key={index}
-                collectionName={fournisseur.collectionName}
-                fieldNames={fournisseur.fieldNames}
-                categorie={categorie}
-              />
-            ))}
-          
-        </>
-      )}
+    <Grid item xs={6}>
+        <Typography variant="h5" color={"#8eb8fb"} fontFamily={"cursive"}>
+          <FontAwesomeIcon icon={faServer} style={{ color: "#8eb8fb" }} />{" "}
+          {categorie.name}
+        </Typography>
+    </Grid>
+    {categorie.name == "ftp" ?
+    <Grid item xs={6} textAlign={"right"}>
+      
+    <Button sx={{
+            w:0.5,
+            pr:0,
+            color: 'green', // Couleur du texte en blanc
+            bgcolor: 'white', // Couleur de fond en vert
+            boxShadow:"1px 2px 2px 1px",
+            textAlign:"center",
+            '&:hover': {
+              bgcolor: 'darkgreen', // Couleur de fond au survol en vert foncé
+              color:"white",
+            },
+          }}
+            startIcon={<RefreshIcon />} // Utilisez l'icône de rafraîchissement
+            size="small" // Vous pouvez ajuster la taille selon vos besoins
+            // Autres props MUI peuvent être ajoutés ici
+          >
+           
+          </Button>
+    </Grid>:null}
+    </Grid>
+      {console.log("cat", categorie)}
+      <Grid
+        overflow={"auto"}
+        sx={{
+          border: 1,
+          padding: 2,
+          borderRadius: 3,
+          borderColor: "#8eb8fb",
+          height: "205px",
+        }}
+      >
+        {fournisseurs.length === 0 ? (
+          <Typography variant="body1">
+            Aucun fournisseur a ete enregistrer.
+          </Typography>
+        ) : (
+          <>
+            {fournisseurs.map((fournisseur, index) =>
+              categorie.name == "ftp" ? (
+                <FournisseurFtp key={index} fournisseur={fournisseur} />
+              ) : (
+                <Fournisseur key={index} fournisseur={fournisseur} />
+              )
+            )}
+          </>
+        )}
       </Grid>
     </>
   );
