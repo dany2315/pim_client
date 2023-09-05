@@ -333,7 +333,7 @@ const NewFournisseurFile = ({numId}) => {
                 sm={14}
                 sx={{ textAlign: { sm: "center" }, mt: 5 }}
               >
-                <Button onClick={handleSave}>sauvgarder</Button>
+                <Button onClick={()=>nameCollect ? handleSave() : showSnackbar("OUUUPS n'oublier pas le nom", "error")}>sauvgarder</Button>
               </Grid>
             </Grid>
           </>

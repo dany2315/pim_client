@@ -93,7 +93,7 @@ const NewFournisseurFtp = ({ numId }) => {
   const handleSaveFtp = async () => {
     try {
       showLoading();
-      const resultName = handleS(nameCollect);
+      const resultName = handleS(nameCollect.toLowerCase());
       console.log("azerty", resultName);
 
       const upKeyNames = keyNamesNew.map((keyName, index) => {
