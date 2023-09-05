@@ -1,23 +1,23 @@
+import { useState, useEffect , useContext } from "react";
 import { Grid, Typography, Box, Button  } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
-import Loading from '../../Loading';
-import Pop from "../../Pop";
-import axios from "axios";
+import api from "../../../../utils/Axios";
 import Papa from "papaparse";
-import { useState, useEffect } from "react";
+//import context
+import {SnackbarContext} from "../../../../context/snackbarContext"
+import { LoadingContext } from "../../../../context/loadingContext";
 
-const Fournisseur = ({ collectionName, fieldNames }) => {
-  const [message, setMessage] = useState("")
-  const [status, setStatus] = useState("")
-  const [open, setOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false);
+const Fournisseur = ({ fournisseur }) => {
+
+  
   const [keyNames, setKeyNames] = useState([]);
   const [plein, setPlein] = useState(false);
-  const collect = collectionName;
-
+  const collect = fournisseur.collectionName;
+  const { showSnackbar } = useContext(SnackbarContext);
+  const { showLoading , hideLoading } = useContext(LoadingContext)
   
  useEffect(() => {
     GetRempli();
@@ -25,8 +25,7 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const GetRempli = async () => {
     try {
-      const reponse = await axios.get(
-        `https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/${collect}`
+      const reponse = await api.get(`/fournisseur/${collect}`
       );
       setPlein(reponse.data);
       console.log(`reponse data ${collect} `, reponse.data);
@@ -36,30 +35,23 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
   };
 
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
   const handleReSave = async (event) => {
     const updatedData = await handleFile(event);
-    setIsLoading(true)
+    showLoading()
     console.log("liste key names ", keyNames);
-    console.log("liste fieldNames : ", fieldNames);
+    console.log("liste fieldNames : ", fournisseur.fieldNames);
     console.log("data : ", updatedData);
     //Sortir le data final en enlevant les champs et les valeur des
     //articles indispenssable et garder que les autre
     const updateDatascop = updatedData.map((item) => {
       const updatedItem = {};
       Object.keys(item).forEach((key, index) => {
-        const updatedKey = fieldNames[index];
+        const updatedKey = fournisseur.fieldNames[index];
         if (updatedKey) {
           updatedItem[updatedKey] = item[key];
         }
       });
-      fieldNames.forEach((updatedKey, index) => {
+      fournisseur.fieldNames.forEach((updatedKey, index) => {
         if (updatedKey === "non_necessaire") {
           delete updatedItem[index]; // Supprimer la clé
           delete updatedItem[updatedKey]; // Supprimer la valeur correspondante
@@ -69,21 +61,17 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
     });
 
     try {
-      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/resave", {
+      const response = await api.post("/fournisseur/file/resaveFile", {
         data: updateDatascop,
-        collectionName: collectionName,
+        collectionName: fournisseur.collectionName,
       });
     console.log("succes resauvgarde ",response.data);
-      setIsLoading(false)
-      setStatus("success")
-      setMessage("Mise a niveau effectuer !")
-      setOpen(true)
+      hideLoading()
+      showSnackbar("Mise a niveau effectuer !","success")
       setPlein(true)
     } catch (error) {
-      setIsLoading(false)
-      setStatus("error")
-      setMessage("Mise a niveau echouer !")
-      setOpen(true)
+      hideLoading()
+      showSnackbar("Mise a niveau echouer !","error")
       setPlein(true)
       console.error("Erreur lors de la resauvegarde des données :", error);
     }
@@ -148,21 +136,17 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
 
   const handleDelete = async() =>{
     try {
-      setIsLoading(true)
-      const response = await axios.post("https://env-mango.jcloud-ver-jpe.ik-server.com/api/fournisseur/deleteId", {
+      showLoading()
+      const response = await api.post("/fournisseur/file/deleteIdFile", {
         collectionName: collect,
       });
       console.log("reponse a la suppresssion : ",response.data);
       setPlein(false)
-      setIsLoading(false)
-      setStatus("success")
-      setMessage("Suppression effectuer !")
-      setOpen(true)
+      hideLoading()
+      showSnackbar("Suppression effectuer !","success")
     } catch (error) {
-      setIsLoading(false)
-      setStatus("error")
-      setMessage("Suppression echouer !")
-      setOpen(true)
+      hideLoading()
+      showSnackbar("Suppression echouer !","error")
       console.error(`Erreur lors de la supprime du contenu de ${collect} :`, error);
     }
   }
@@ -177,20 +161,22 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
         
         p={1}
         sx={{
+          mt:1,
+          mb:1,
           backgroundColor: "white",
           padding: "16px",
           borderRadius: "8px",
           transition: "box-shadow 0.3s ease",
-          boxShadow: "2px 2px 6px rgba(130, 206, 249, 1.5);",
+          boxShadow: "2px 2px 6px rgba(142, 184, 251, 1.5);",
           "&:hover": {
-          boxShadow: "4px 4px 8px rgba(130, 206, 249, 2)",
+          boxShadow: "4px 4px 8px rgba(116, 168, 251, 2)",
           
         },
       }}
       >
 
         <Grid item xs={4}>
-          <Typography variant="h7" fontFamily={"cursive"}>{collectionName}</Typography>
+          <Typography variant="h7" fontFamily={"cursive"}>{fournisseur.collectionName}</Typography>
         </Grid>
 
         <Grid item xs={4} sx={{ borderLeft: "solid 1px", textAlign: "center" }}>
@@ -252,8 +238,8 @@ const Fournisseur = ({ collectionName, fieldNames }) => {
           }
         </Grid>
       </Grid>
-      {isLoading ? <Loading />:null}
-      <Pop open={open} message={message} handleClose={handleClose} status={status}/>
+      
+     
     </>
   );
 };

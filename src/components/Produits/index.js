@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import axios from "axios";
+import api from "../../utils/Axios";
 import Search from "../Search";
 import ProduitMobile from "../mobile/ProduitMobile";
 import Produit from "./Produit";
@@ -28,9 +28,7 @@ function Produits() {
   const onSearch = async (reference) => {
       setRef(reference)
       try {
-        const response = await axios.get(
-          `https://env-mango.jcloud-ver-jpe.ik-server.com/api/produits/${reference}`
-        );
+        const response = await api.get(`/produits/${reference}`);
         setproduits(response.data);
       } catch (error) {
         console.log(`erreur lors de la recuperations du produit ${reference} `, error);

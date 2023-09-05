@@ -1,9 +1,11 @@
 //mui
 import { Container } from "@mui/material";
 //project import
+import CustomSnackbar from "../components/CustomSnackbar/index"
 import Navbar from "./NavBar";
 import Footer from '../components/Footer'
 import { Outlet } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const Layaout = () =>{
 
@@ -15,16 +17,16 @@ return (
         sx={{
           paddingTop: "24px",
           paddingBottom: "24px",
-          backgroundColor: "grey",
         }}
       >
+        <Loading/>
+        <CustomSnackbar/>
         <Container
           maxWidth="lg"
           sx={{
             paddingTop: "24px",
             paddingBottom: "24px",
             borderRadius: "16px",
-            boxShadow: "0px 4px 8px 4px rgba(0, 0, 0, 0.1)",
             backgroundColor: "white",
             border: "1px solid #ccc",
             display: "flex",
@@ -33,11 +35,13 @@ return (
             flexDirection: "column",
           }}
         >
-         <Outlet/>
           
+         <Outlet/>
+
         </Container>
       </Container>
       <Footer/>
+      
     </>
 )}
 
