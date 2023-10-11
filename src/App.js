@@ -8,13 +8,20 @@ import Fournisseurs from "./components/Fournisseurs";
 import NewFournisseur from "./components/NewFournisseur";
 import { AuthContext } from "./context/authContext";
 
+
 const App = () => {
   
-  const { isAuthenticated, login, logout } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
 
 useEffect(()=>{
-
+verifToken()
 },[])
+
+const verifToken = async() =>{
+ const token = localStorage.getItem("tokNCS")
+ 
+}
+
 
   return (
     <Routes>
@@ -24,7 +31,7 @@ useEffect(()=>{
             <Route path="newFournisseur" element={<NewFournisseur />} />
           </Route>
           <Route path="login" element={isAuthenticated?<Navigate to="/"/>:<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route path="register" element={isAuthenticated?<Navigate to="/"/>:<Register />} />
     </Routes>
   );
 };

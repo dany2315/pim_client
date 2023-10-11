@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Container, Box, Button, Grid } from "@mui/material";
+import { Typography, Container, Box, Button, Grid , useMediaQuery, useTheme } from "@mui/material";
 import Fournisseur from "./Bloc";
 import { NavLink } from "react-router-dom";
 import api from "../../utils/Axios";
@@ -7,6 +7,8 @@ import Bloc from "./Bloc";
 
 function Fournisseurs() {
   const [categories, setCategories] = useState([]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -45,7 +47,7 @@ function Fournisseurs() {
       <Grid container spacing={3} direction="row" sx={{ marginTop: "16px" }}>
         
           {categories.map((categorie, index) => (
-            <Grid item xs={6} justifyContent="center"  direction="collumn" sx={{padding:0.5 ,}} key={index}>
+            <Grid item xs={isMobile?12:6} justifyContent="center"  direction="collumn" sx={{padding:0.5 ,}} key={index}>
               <Bloc
                 categorie={categorie}
               />

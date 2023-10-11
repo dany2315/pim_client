@@ -1,5 +1,5 @@
 import { useState, useEffect , useContext } from "react";
-import { Grid, Typography, Box, Button  } from "@mui/material";
+import { Grid, Typography, Box, Button , useMediaQuery, useTheme } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -12,7 +12,9 @@ import { LoadingContext } from "../../../../context/loadingContext";
 
 const Fournisseur = ({ fournisseur }) => {
 
-  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [keyNames, setKeyNames] = useState([]);
   const [plein, setPlein] = useState(false);
   const collect = fournisseur.collectionName;
@@ -175,8 +177,8 @@ const Fournisseur = ({ fournisseur }) => {
       }}
       >
 
-        <Grid item xs={4}>
-          <Typography variant="h7" fontFamily={"cursive"}>{fournisseur.collectionName}</Typography>
+        <Grid item xs={4} overflow={"auto"}>
+          <Typography variant="h7" fontFamily={"cursive"}  >{fournisseur.collectionName}</Typography>
         </Grid>
 
         <Grid item xs={4} sx={{ borderLeft: "solid 1px", textAlign: "center" }}>
@@ -228,6 +230,7 @@ const Fournisseur = ({ fournisseur }) => {
                       borderRadius: "20px",
                       backgroundColor: "#82CEF9",
                       color: "white",
+                      fontSize:"11px"
                     }}
                   >
                     <div>Choose File</div>

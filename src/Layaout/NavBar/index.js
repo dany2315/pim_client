@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 import { AppBar, Toolbar, Button, IconButton, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 //react router
 import {NavLink} from 'react-router-dom'
+import { AuthContext } from '../../context/authContext';
 
-const loginButtonStyle = {
+const logoutButtonStyle = {
   backgroundColor: '#FF3366',
   color: '#FFFFFF',
   fontSize: '0.8rem',
   '&:hover': {
     backgroundColor: '#CC0052',
-  },
-};
-
-const registerButtonStyle = {
-  backgroundColor: '#82aff9',
-  color: '#FFFFFF',
-  fontSize: '0.8rem',
-  '&:hover': {
-    backgroundColor: '#8eb8fb',
   },
 };
 
@@ -51,6 +43,8 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const {logout} =useContext(AuthContext)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,24 +98,14 @@ function Navbar() {
         </div>
         <div>
           {isMobile ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '150px' }}>
-              <Button variant="contained" sx={{ ...loginButtonStyle, width: '70px' , py: '1px' }}>
-                login
+              <Button variant="contained" sx={{ ...logoutButtonStyle, width: '70px' , py: '4px' }}>
+              Logout
               </Button>
-              <Button variant="contained" sx={{ ...registerButtonStyle, width: '70px' , py: '1px' }}>
-              Sign up
-              </Button>
-            </div>
           ) : (
-            <>
-              <Button variant="contained" sx={loginButtonStyle}>
-                Login
+              <Button variant="contained" sx={logoutButtonStyle} onClick={logout}>
+                Logout
               </Button>
-              <Button variant="contained" sx={{ ...registerButtonStyle, marginLeft: '10px' }}>
-              Sign up
-              </Button>
-            </>
-          )}
+            )}
         </div>
       </Toolbar>
     </AppBar>
