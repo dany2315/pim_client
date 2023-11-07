@@ -7,10 +7,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
-
-
-
-
   const login = (token) => {
     // Stocker le JWT dans le local storage ou le cookie
     // Set isAuthenticated à true
