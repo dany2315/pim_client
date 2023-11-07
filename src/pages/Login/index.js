@@ -29,7 +29,8 @@ function Login() {
   const [identifiant, setIdentifiant] = useState('');
   const [password, setPassword] = useState('');
 
-  const verif = async () => {
+  const verif = async (e) => {
+    e.preventDefault();
     showLoading()
     try {
       const reponse = await api.post('/auth',{
@@ -39,7 +40,7 @@ function Login() {
         setIdentifiant("")
         setPassword("")
         hideLoading()
-        login()
+        login(reponse.data.token)
         showSnackbar(reponse.data.message,"success")
       console.log(reponse.data);
     } catch (error) {
@@ -60,7 +61,7 @@ function Login() {
         <MDBCol col='12' className='arriere'>
 
           <MDBCard className='text-grey my-5 mx-auto mt-4' style={{borderRadius: '3rem', maxWidth: '400px' ,background:'#f5f5f5'}}>
-            <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100 ' >
+            <MDBCardBody className='p- d-flex flex-column align-items-center mx-auto w-100 ' type='form'>
             <div className="text-center">
               <img src={logo}
               width={"50px"}
@@ -70,17 +71,18 @@ function Login() {
       
               <p className="text-grey-50 mb-3">Please enter your login and password!</p>
 
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Identifiant'  type='email' size="md" value={identifiant}
+<form onSubmit={verif} >
+              <MDBInput wrapperClass='class="form-control mb-4  w-100' labelClass='text-grey' label='Identifiant'  type='text' size="md" value={identifiant}
   onChange={(e) => setIdentifiant(e.target.value)}/>
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-grey' label='Password'  type='password' size="md" value={password}
+              <MDBInput wrapperClass='class="form-control mb-4  w-100' labelClass='text-grey' label='Password'  type='password' size="md" value={password}
   onChange={(e) => setPassword(e.target.value)}/>
 
-              <p className="small mb-3 pb-lg-2"><a class="text-grey-50" href="#!">Forgot password?</a></p>
-              <MDBBtn outline className='mx-2 px-5 arriere log' color='white' size='md' onClick={verif}>
+              <p className="mx-5 mb-3  text-center"><a class="text-grey-50 " href="#!">Forgot password?</a></p>
+              <MDBBtn outline className='mx-5 px-5 arriere log' color='white' size='md' type='submit'>
                 Login
               </MDBBtn>
 
-              <div className='d-flex flex-row '>
+              <div className='d-flex flex-row mx-5'>
                 <MDBBtn tag='a' color='none' className='m-3' style={{ color: '#1877F2' }}>
                   <MDBIcon fab icon='facebook-f' size="md"/>
                 </MDBBtn>
@@ -98,6 +100,7 @@ function Login() {
                 <p className="mb-0">Don't have an account? <a href="/register" class="text-grey-50 fw-bold">Sign Up</a></p>
 
               </div>
+              </form>
             </MDBCardBody>
           </MDBCard>
 

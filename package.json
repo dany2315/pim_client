@@ -16,8 +16,11 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "iconv-lite": "^0.6.3",
     "jschardet": "^3.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mdb-react-ui-kit": "^6.1.0",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
@@ -25,6 +28,8 @@
     "react-router-dom": "^6.11.1",
     "react-scripts": "5.0.1",
     "react-social-login-buttons": "^3.9.1",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -59,6 +64,7 @@
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.1",
     "style-loader": "^3.3.2",
+    "tailwindcss": "^3.3.5",
     "webpack": "^5.82.0",
     "webpack-cli": "^5.1.0"
   }

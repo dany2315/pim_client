@@ -30,7 +30,7 @@ const FournisseurFtp = ({ fournisseur }) => {
       const minutes = date.getMinutes();
       const dateFormatee = `${jour.toString().padStart(2, "0")}/${mois
         .toString()
-        .padStart(2, "0")}/${annee.toString().slice(2)} ${heures
+        .padStart(2, "0")}/${annee.toString().slice(2)}   ${heures
         .toString()
         .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
       setTime(dateFormatee);
@@ -62,7 +62,7 @@ const FournisseurFtp = ({ fournisseur }) => {
           },
         }}
       >
-        <Grid item xs={4}>
+        <Grid item xs={4} overflow={"auto"}>
           <Typography variant="h7" fontFamily={"cursive"}>
             {fournisseur.collectionName}
           </Typography>
@@ -88,7 +88,7 @@ const FournisseurFtp = ({ fournisseur }) => {
           ></Button>
         </Grid>
         <Grid item xs={4} sx={{ borderLeft: "solid 1px", textAlign: "center" }}>
-          <Typography variant="h8" fontFamily={"cursive"}>
+          <Typography  fontFamily={"cursive"} sx={{fontSize:"13px"}}>
             {time}
           </Typography>
         </Grid>

@@ -11,7 +11,8 @@ module.exports = {
   },
   resolve: {
     fallback: {
-      buffer: require.resolve('buffer/'),
+      
+      buffer: require.resolve("buffer/"), 
     },
     extensions: ['.js', '.jsx'],
   },

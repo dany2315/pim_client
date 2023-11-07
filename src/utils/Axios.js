@@ -8,5 +8,14 @@ const api = axios.create({
   baseURL: currentUrl
   // Autres configurations spécifiques à l'environnement de développement
 });
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('tokNCS'); 
+  console.log(token, 'aaaa');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
 
 export default api
