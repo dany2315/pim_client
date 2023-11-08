@@ -60,7 +60,7 @@ function Login() {
       <MDBRow className='d-flex justify-content-center align-items-center h-100'>
         <MDBCol col='12' className='arriere'>
 
-          <MDBCard className='text-grey my-5 mx-auto mt-4' style={{borderRadius: '3rem', maxWidth: '400px' ,background:'#f5f5f5'}}>
+          <MDBCard className='text-grey my-5 mx-auto mt-4' style={{borderRadius: '3rem', maxWidth: '400px' }}>
             <MDBCardBody className='p- d-flex flex-column align-items-center mx-auto w-100 ' type='form'>
             <div className="text-center">
               <img src={logo}

@@ -98,7 +98,7 @@ function Navbar() {
         </div>
         <div>
           {isMobile ? (
-              <Button variant="contained" sx={{ ...logoutButtonStyle, width: '70px' , py: '4px' }}>
+              <Button variant="contained" sx={{ ...logoutButtonStyle, width: '70px' , py: '4px' }} onClick={logout}>
               Logout
               </Button>
           ) : (

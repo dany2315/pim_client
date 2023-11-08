@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import {
+  Box,
+  Button,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+
 import NewFournisseurFile from "./NewFournisseurFile";
 import NewFournisseurFtp from "./NewFournisseurFtp";
 import NewFournisseurUrl from "./NewFournisseurUrl";
@@ -9,6 +14,8 @@ import api from "../../utils/Axios";
 const NewFournisseur = () => {
   const [selectedOption, setSelectedOption] = useState("ftp");
   const [options,setOptions] = useState([])
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchCategories = async() => {
@@ -34,12 +41,14 @@ console.log(response.data);
           <Button
             key={index}
             sx={{
+
               marginBottom: 5,
               border: 0,
               borderRadius: option.radius,
               backgroundColor:
                 selectedOption === option.name ? "#82aff9" : "#cadeff",
               color: "white",
+              fontSize:isMobile?10:15,
               "&:hover": {
                 backgroundColor: "#8eb8fb",
                 border: 0,
