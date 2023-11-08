@@ -6,11 +6,15 @@ import Navbar from "./NavBar";
 import Footer from '../components/Footer'
 import { Outlet } from "react-router-dom";
 import Loading from "../components/Loading";
+import PullToRefresh from 'react-simple-pull-to-refresh';
 
 const Layaout = () =>{
-
+const handleRefresh = () =>{
+  window.location.reload();
+}
 return ( 
     <>
+    <PullToRefresh onRefresh={handleRefresh}>
       <Navbar />
 
       <Container
@@ -41,6 +45,7 @@ return (
         </Container>
       </Container>
       <Footer/>
+      </PullToRefresh>
       
     </>
 )}
