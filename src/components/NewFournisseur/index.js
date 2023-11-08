@@ -5,11 +5,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-
+import { Link, Outlet } from "react-router-dom";
 import NewFournisseurFile from "./NewFournisseurFile";
 import NewFournisseurFtp from "./NewFournisseurFtp";
 import NewFournisseurUrl from "./NewFournisseurUrl";
 import api from "../../utils/Axios";
+import BackButton from "../BackButton";
+
+
 
 const NewFournisseur = () => {
   const [selectedOption, setSelectedOption] = useState("ftp");
@@ -18,17 +21,22 @@ const NewFournisseur = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    const fetchCategories = async() => {
-      try {
-        const response = await api.get("/fournisseur/categories");
-setOptions(response.data)
-console.log(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    
     fetchCategories()
   }, []);
+
+ 
+
+  const fetchCategories = async() => {
+    try {
+      const response = await api.get("/fournisseur/categories");
+setOptions(response.data)
+console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -36,7 +44,9 @@ console.log(response.data);
 
   return (
     <>
+ 
       <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <BackButton/>
         {options.map((option, index) => (
           <Button
             key={index}
@@ -68,7 +78,10 @@ console.log(response.data);
         {selectedOption === "file" && <NewFournisseurFile numId={options.find((option) => option.name === "file")?._id || null}/>}
 
         {selectedOption === "url" && <NewFournisseurUrl numId={options.find((option) => option.name === "url")?._id || null}/>}
+        <Link to="/bar">delete</Link>
+        <Outlet/>
       </>
+     
     </>
   );
 };
