@@ -28,6 +28,8 @@
       "purpose": "maskable"
     }
   ],
+  "theme_color":"#8eb8fb",
+  "background_color":"#8eb8fb",
   "start_url": ".",
   "display": "fullscreen",
   "orientation": "portrait"

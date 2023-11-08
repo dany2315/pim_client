@@ -35,7 +35,7 @@ const Search = ({ onSearch }) => {
       <Button
         variant="contained"
         sx={{
-          backgroundColor:'#82CEF9',
+          color:"white",
           height: "28px",
           minWidth: "80px",
         }}

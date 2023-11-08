@@ -1,12 +1,4 @@
-.arriere{
-    background: #8eb8fb;
-  
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, rgba(142,184,251,0.5), rgba(195,232,249,0.5));
-  
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, rgba(142,184,251,0.5), rgba(195,232,249,0.5))
-}
+
 .log{
     border-radius: 2rem;
 }
